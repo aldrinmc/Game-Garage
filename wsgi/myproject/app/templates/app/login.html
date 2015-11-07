@@ -21,16 +21,20 @@
             </div>
             <div class="form-group">
               <button type="submit" class="btn btn-primary btn-lg btn-block">Sign In</button>
-              <span class="pull-right"><a href="#">Register</a></span><span><a href="#">Need help?</a></span>
+              <span class="pull-right"><a href="#">Register</a></span><span><a href="#">Forgot Password?</a></span>
             </div>
           </form>
       </div>
       <div class="modal-footer">
           <div class="col-md-12">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+          <button id="closemodal" class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 		  </div>	
       </div>
   </div>
   </div>
 </div>
+
+<script type="text/javascript">
+    $('#closemodal').modal('hide');
+</script>
 {% endblock content %}
