@@ -1,0 +1,24 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+    <h1>SignUp</h1>
+      <form method="POST" class="form-inline" role="form">
+        {% csrf_token %}
+        <div class="form-group">
+          <input name="fname" type="text" class="form-control" placeholder=" first name" required>
+        </div>
+        <div class="form-group">
+          <input name="lname" type="text" class="form-control" placeholder=" last name" required>
+        </div><br>
+        <div class="form-group">
+          <input name="contact_number" type="text" class="form-control" placeholder=" contact number" required>
+        </div>
+        <div class="form-group">
+          <input name="email" type="email" class="form-control" placeholder=" email" required>
+        </div><br>
+        <div class="form-group">
+          <input name="password" type="password" class="form-control" placeholder=" password" required>
+        </div><br>
+            <button type="submit" class="save btn btn-default">Signup</button>
+        </form>
+{% endblock %}

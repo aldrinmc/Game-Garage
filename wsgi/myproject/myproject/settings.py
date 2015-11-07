@@ -16,6 +16,21 @@ WSGI_DIR = os.path.dirname(BASE_DIR)
 REPO_DIR = os.path.dirname(WSGI_DIR)
 DATA_DIR = os.environ.get('OPENSHIFT_DATA_DIR', BASE_DIR)
 
+# a setting to determine whether we are running on OpenShift
+ON_OPENSHIFT = False
+if os.environ.has_key('OPENSHIFT_REPO_DIR'):
+    ON_OPENSHIFT = True
+if os.environ.has_key('OPENSHIFT_APP_NAME'):
+    DB_NAME = os.environ['OPENSHIFT_APP_NAME']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_USERNAME'):
+    DB_USER = os.environ['OPENSHIFT_POSTGRESQL_DB_USERNAME']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_PASSWORD'):
+    DB_PASSWD = os.environ['OPENSHIFT_POSTGRESQL_DB_PASSWORD']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_HOST'):
+    DB_HOST = os.environ['OPENSHIFT_POSTGRESQL_DB_HOST']
+if os.environ.has_key('OPENSHIFT_POSTGRESQL_DB_PORT'):
+    DB_PORT = os.environ['OPENSHIFT_POSTGRESQL_DB_PORT']
+
 import sys
 sys.path.append(os.path.join(REPO_DIR, 'libs'))
 import secrets
@@ -32,6 +47,7 @@ DEBUG = os.environ.get('DEBUG') == 'True'
 
 from socket import gethostname
 ALLOWED_HOSTS = [
+    '*',
     gethostname(), # For internal OpenShift load balancer security purposes.
     os.environ.get('OPENSHIFT_APP_DNS'), # Dynamically map to the OpenShift gear name.
     #'example.com', # First DNS alias (set up in the app)
@@ -48,6 +64,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,14 +101,30 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        # GETTING-STARTED: change 'db.sqlite3' to your sqlite3 database:
-        'NAME': os.path.join(DATA_DIR, 'db.sqlite3'),
+if ON_OPENSHIFT:
+    # os.environ['OPENSHIFT_DB_*'] variables can be used with databases created
+    # with rhc app cartridge add (see /README in this git repo)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': DB_NAME,               # Or path to database file if using sqlite3.
+            'USER': DB_USER,               # Not used with sqlite3.
+            'PASSWORD': DB_PASSWD,         # Not used with sqlite3.
+            'HOST': DB_HOST,               # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': DB_PORT,               # Set to empty string for default. Not used with sqlite3.
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'gamers',
+            'USER': 'gamer_admin',
+            'PASSWORD': 'password',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -111,4 +144,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+AUTH_USER_MODEL = "app.User"
 STATIC_ROOT = os.path.join(WSGI_DIR, 'static')
