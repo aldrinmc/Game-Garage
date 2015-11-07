@@ -75,6 +75,11 @@ def user_home(request):
     if not request.user.is_authenticated():
         return redirect('app.views.user_login')
 
+
+def user_logout(request):
+    logout(request)
+    return redirect('app.views.user_login')
+
 def user_admin(request):
     if request.user.is_authenticated():
         admin = User.objects.get(pk=request.user.id)
