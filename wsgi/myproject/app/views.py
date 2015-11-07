@@ -41,3 +41,43 @@ def user_add(request):
         return render(request, 'app/signup.html', {'form': form})
 
     return render(request, 'app/signup.html', {'form': form})
+
+def user_login(request):
+    if request.method == 'POST':
+        try:
+            email = request.POST['email']
+            password = request.POST['password']
+            user = authenticate(email=email, password=password)
+            if user is not None and user.is_active:
+                login(request, user)
+                return redirect('app.views.user_home')
+
+        except User.DoesNotExist:
+            return redirect('app.views.user_login') 
+
+    elif request.user.is_authenticated():
+        return redirect('app.views.user_home')
+
+    return render(request, 'app/login.html')   
+
+def user_home(request):
+    if request.user.is_authenticated():
+        user = User.objects.get(pk=request.user.id)
+
+        # if user is an admin
+        if user.is_admin:
+            return redirect('app.views.user_admin')
+
+        # if user is not an admin.
+        elif not user.is_admin:
+            return render(request, 'app/home.html', {'user': user})
+
+    if not request.user.is_authenticated():
+        return redirect('app.views.user_login')
+
+def user_admin(request):
+    if request.user.is_authenticated():
+        admin = User.objects.get(pk=request.user.id)
+        return render(request, 'app/admin/index.html', {'user': admin})
+    else:
+        return redirect('app.views.user_login')
