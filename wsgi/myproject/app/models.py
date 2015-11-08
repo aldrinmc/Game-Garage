@@ -61,18 +61,14 @@ class Game_info(models.Model):
     description = models.TextField(max_length=3000)
     platform = models.CharField(max_length=15)
     category_id = models.ForeignKey(Category)
+    img = models.ImageField(null=True, blank=True)
+    thumbnail = models.ImageField(null=True, blank=True)
+    dlink = models.CharField(max_length=100, null=True, blank=True)
+    vlink = models.CharField(max_length=100, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
-
-class Multimedia(models.Model):
-    img = models.ImageField()
-    thumbnail = models.ImageField()
-    dlink = models.CharField(max_length=100)
-    vlink = models.CharField(max_length=100)
-    game = models.ForeignKey(Game_info)
-
 
 class Feedback(models.Model):
     comment = models.TextField(max_length=300)
