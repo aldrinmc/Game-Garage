@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import AnonymousUser
 from django.forms import forms
@@ -6,6 +7,22 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm
 from .models import User, Category, Game_info
+=======
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
+from django.utils import timezone
+from django.contrib.auth import authenticate, login, logout
+from .forms import UserForm, AddGameForm, AddCategoryForm
+from .models import User, Game_info
+from django.http import Http404
+
+
+def index(request):
+    if not request.user.is_authenticated():
+        return HttpResponse("please login")
+
+    if request.user.is_authenticated():
+        return HttpResponse("you already login!")
+>>>>>>> 370a2976d00ba09eeb0613a76a0dd8f6c2603170
 
 
 def user_add(request):
@@ -33,10 +50,8 @@ def user_add(request):
 
     return render(request, 'app/signup.html', {'form': form})
 
-
 def user_login(request):
     if request.method == 'POST':
-
         try:
             email = request.POST['email']
             password = request.POST['password']
@@ -46,37 +61,16 @@ def user_login(request):
                 return redirect('app.views.user_home')
 
         except User.DoesNotExist:
-            return redirect('app.views.user_login')
+            return redirect('app.views.user_login') 
 
     elif request.user.is_authenticated():
         return redirect('app.views.user_home')
 
-    return render(request, 'app/login.html')
+    return render(request, 'app/login.html')   
 
-
-def user_logout(request):
-    logout(request)
-    return redirect('app.views.user_login')
-
-def password_change(request):
-    if request.method == "POST":
-        form = ChangePasswordForm(request.POST)
-        if form.is_valid():
-            post = User.objects.get(password=form.old_password)
-            post.set_password(form.password)
-            post.save()
-            return redirect('app.views.user_login')
-    else:
-        form = ChangePasswordForm()
-    return render(request, 'app/changepassword.html', {'form': form})
-
-# if successfully log in, this function is called.
-# the user is either admin or not admin
-# different view for admin and not admin
 def user_home(request):
     if request.user.is_authenticated():
         user = User.objects.get(pk=request.user.id)
-        games = Game_info.objects.all()
 
         # if user is an admin
         if user.is_admin:
@@ -84,13 +78,19 @@ def user_home(request):
 
         # if user is not an admin.
         elif not user.is_admin:
-            return render(request, 'app/home.html', {'user': user, 'games': games})
+            return render(request, 'app/home.html', {'user': user})
 
     if not request.user.is_authenticated():
         games = Game_info.objects.all()
         user = AnonymousUser.id
         return render(request, 'app/home.html', {'user': user, 'games': games})
 
+
+def user_logout(request):
+    logout(request)
+    return redirect('app.views.user_login')
+
+#################### ADMIN DASHBOARD #######################
 
 def user_admin(request):
     if request.user.is_authenticated() and request.user.is_admin:
@@ -99,10 +99,11 @@ def user_admin(request):
     else:
         return redirect('app.views.user_login')
 
-def category(request):
+def add_game(request):
     if request.method == "POST":
-        form = AddCategoryForm(request.POST)
+        form = AddGameForm(request.POST)
         if form.is_valid():
+<<<<<<< HEAD
             post = form.save(commit=False)
             post.save()
             return redirect('app.views.category')
@@ -110,21 +111,31 @@ def category(request):
         form = AddCategoryForm()
         lists = Category.objects.all()
         return render(request, 'app/admin/category.html', {'form': form, 'lists': lists})
-
-def delete_category(request, pk):
-    lists = Category.objects.get(pk=pk)
-    lists.is_active = False
-    lists.save()
-    return redirect('app.views.category')
-
-def gameinfo(request):
-    if request.method == "POST":
-        form = AddGameForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.category_id = Category.objects.get(pk=1)
-            post.save()
-            return redirect('app.views.user_admin')
+=======
+            model = form.save(commit=False)
+            model.save() 
     else:
         form = AddGameForm()
-    return render(request, 'app/admin/gameinfo.html', {'form': form})
+    return render(request, 'app/admin/add_game.html', {'form': form})
+
+def update_game(request, pk):
+    return render(request, 'app/update_game.html', {'form': form})
+>>>>>>> 370a2976d00ba09eeb0613a76a0dd8f6c2603170
+
+def delete_game(request):
+    return render(request, 'app/admin/delete_game.html')
+
+def category(request):
+    if request.method == "POST":
+        form = AddCategoryForm(request.POST)
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save() 
+    else:
+        form = AddCategoryForm()
+    return render(request, 'app/admin/add_category.html', {'form': form})
+
+def requested_games(request):
+    return render(request, 'app/admin/requested_games.html')
+
+#############################################################
