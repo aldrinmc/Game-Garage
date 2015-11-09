@@ -84,3 +84,7 @@ class Game_request(models.Model):
     published_date = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(User)
     is_active = models.BooleanField(default=True)
+
+    def publish(self):
+        self.published_date=timezone.now()
+        self.save()

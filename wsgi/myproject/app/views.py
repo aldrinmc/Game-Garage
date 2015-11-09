@@ -2,8 +2,8 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm
-from .models import User, Category, Game_info
+from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form
+from .models import User, Category, Game_info, Game_request
 from django.http import Http404
 from app import admin
 
@@ -177,3 +177,21 @@ def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
     lst = Category.objects.all()
     return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2})
+
+def viewreq(request):
+    lists=Game_request.objects.all()
+    return render(request, 'app/admin/requested.html', {'lists': lists})
+
+
+def requestgame(request ,template_name ='app/request.html'):
+    form = Form(request.POST)
+    if form.is_valid():
+        form.save()
+        return redirect('app.views.user_admin')
+    return render(request, template_name, {'form':form})
+    
+def delete_request(request, pk):
+    lists = Game_request.objects.get(pk=pk)
+    lists.is_active = False
+    lists.save()
+    return redirect('app.views.viewreq')

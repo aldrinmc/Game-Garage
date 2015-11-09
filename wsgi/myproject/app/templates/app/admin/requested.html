@@ -1,0 +1,21 @@
+{% extends "app/admin/base.html" %}
+
+{% block content %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Requested Games</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for list in lists %}
+                {% if list.is_active == True %}
+                    <tr>
+                        <td>{{ list.title }}</td>
+                        <td><a href="{% url "delete_req" pk=list.pk %}">Delete</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django import forms
-from .models import User, Category, Game_info
+from .models import User, Category, Game_info, Game_request
+from django.forms import ModelForm
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -35,3 +36,8 @@ class ChangePasswordForm(forms.ModelForm):
             'password': forms.PasswordInput(),
             'confirm_password': forms.PasswordInput(),
         }
+
+class Form(ModelForm):
+    class Meta:
+        model = Game_request
+        fields = ['title']
