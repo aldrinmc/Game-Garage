@@ -118,9 +118,9 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'gamers',
+            'NAME': 'mydb',
             'USER': 'postgres',
-            'PASSWORD': 'Fake Pass',
+            'PASSWORD': 'k3v1nm1tn1ck',
             'HOST': 'localhost',
             'PORT': '5432',
         }

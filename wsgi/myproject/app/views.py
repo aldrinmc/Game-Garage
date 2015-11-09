@@ -102,6 +102,7 @@ def user_home(request):
     if not request.user.is_authenticated():
         return redirect('app.views.user_login')
 
+####################### ADMIN DASHBOARD ########################
 
 def user_admin(request):
     if request.user.is_authenticated():
@@ -109,6 +110,25 @@ def user_admin(request):
         return render(request, 'app/admin/index.html', {'user': admin})
     else:
         return redirect('app.views.user_login')
+
+def add_game(request):
+    if request.method == "POST":
+        form = AddGameForm(request.POST)
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save() 
+    else:
+        form = AddGameForm()
+    return render(request, 'app/admin/add_game.html', {'form': form})
+
+def update_game(request):
+    return render(request, 'app/admin/update_game.html')
+    
+def delete_game(request):
+    return render(request, 'app/admin/delete_game.html')
+
+def requested_games(request):
+    return render(request, 'app/admin/requested_games.html')
 
 def category(request):
     if request.method == "POST":
@@ -140,6 +160,9 @@ def gameinfo(request):
     else:
         form = AddGameForm()
     return render(request, 'app/admin/gameinfo.html', {'form': form, 'lst':lst})
+
+################################################################
+
 def category_list(request, pk):
     lst = Category.objects.all()
     tlst2 = Game_info.objects.all()
