@@ -20,7 +20,7 @@ class AddCategoryForm(forms.ModelForm):
 class AddGameForm(forms.ModelForm):
     class Meta:
         model = Game_info
-        fields = ['title', 'description', 'platform']
+        fields = ['title', 'description', 'platform', 'category_id', 'img', 'thumbnail', 'dlink', 'vlink', 'is_active']
 
 class ChangePasswordForm(forms.ModelForm):
     old_password = forms.CharField(widget=forms.PasswordInput)
