@@ -1,23 +1,13 @@
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import AnonymousUser
+from django.forms import forms
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm
 from .models import User, Category, Game_info
-from django.http import Http404
-from app import admin
-
-def index(request):
-    if not request.user.is_authenticated():
-        return render(request, 'app/login.html')
-
-    if request.user.is_authenticated():
-        return redirect('app.views.user_home')
 
 
-#######################USER###############################################################
-#######################USER###############################################################
-#######################USER###############################################################
 def user_add(request):
     try:
         if request.method == 'POST':
@@ -97,11 +87,13 @@ def user_home(request):
             return render(request, 'app/home.html', {'user': user, 'games': games})
 
     if not request.user.is_authenticated():
-        return redirect('app.views.user_login')
+        games = Game_info.objects.all()
+        user = AnonymousUser.id
+        return render(request, 'app/home.html', {'user': user, 'games': games})
 
 
 def user_admin(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_admin:
         admin = User.objects.get(pk=request.user.id)
         return render(request, 'app/admin/index.html', {'user': admin})
     else:
@@ -114,10 +106,10 @@ def category(request):
             post = form.save(commit=False)
             post.save()
             return redirect('app.views.category')
-    else:
+    elif request.user.is_admin:
         form = AddCategoryForm()
         lists = Category.objects.all()
-    return render(request, 'app/admin/category.html', {'form': form, 'lists': lists})
+        return render(request, 'app/admin/category.html', {'form': form, 'lists': lists})
 
 def delete_category(request, pk):
     lists = Category.objects.get(pk=pk)
