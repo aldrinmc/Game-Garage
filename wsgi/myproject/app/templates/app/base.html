@@ -29,14 +29,16 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav" style="float: right">
                     <li>
-                        <a href="#">Home</a>
+                        <a href="{% url "user_home" %}">Home</a>
                     </li>
                     <li>
                         <a href="#">Category</a>
                     </li>
+                    {% if user.is_authenticated %}
                     <li>
-                        <a href="#">Request</a> 
+                        <a href="#">Request</a>
                     </li>
+                    {% endif %}
 
                     <li class="dropdown">
                         {% if user.is_authenticated %}
@@ -46,10 +48,10 @@
                             </a>
                             <ul class="dropdown-menu" role="menu"   >
                                 <li>
-                                    <a href="#">Change Password</a>
+                                    <a href="{% url "changepassword" %}">Change Password</a>
                                 </li>
                                 <li>
-                                    <a href="{% url "app.views.user_logout" %}">Log out</a>
+                                    <a href="{% url "user_logout" %}">Log out</a>
                                 </li>
                             </ul>
                         {% elif not user.is_authenticated %}
@@ -62,7 +64,7 @@
                                     <a href="{% url "user_login" %}">Login</a>
                                 </li>
                                 <li>
-                                    <a href="#">Signup</a>
+                                    <a href="{% url "user_add" %}">Signup</a>
                                 </li>
                             </ul>
                         {% endif %}
