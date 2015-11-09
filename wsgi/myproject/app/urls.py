@@ -11,5 +11,7 @@ urlpatterns = [
     url(r'category/$', views.category, name='category'),
     url(r'^(?P<pk>[0-9]+)/deletecategory/$', views.delete_category, name='delete_category'),
     url(r'^gameinfo', views.gameinfo, name='gameinfo'),
+    url(r'^(?P<pk>[0-9]+)/category_list/$', views.category_list, name='category_list'),
+    url(r'^(?P<pk>[0-9]+)/gamepage/$', views.gamepage, name='gamepage'),
     url(r'changepassword', views.password_change, name='changepassword'),
 ]

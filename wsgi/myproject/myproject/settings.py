@@ -43,8 +43,8 @@ SECRETS = secrets.getter(os.path.join(DATA_DIR, 'secrets.json'))
 SECRET_KEY = SECRETS['secret_key']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG') == 'True'
-
+#DEBUG = os.environ.get('DEBUG') == 'True'
+DEBUG = True
 from socket import gethostname
 ALLOWED_HOSTS = [
     '*',
@@ -119,10 +119,10 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'gamers',
-            'USER': 'gamer_admin',
-            'PASSWORD': 'password',
+            'USER': 'postgres',
+            'PASSWORD': 'Fake Pass',
             'HOST': 'localhost',
-            'PORT': '',
+            'PORT': '5432',
         }
     }
 

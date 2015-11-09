@@ -19,6 +19,7 @@ def index(request):
 #######################USER###############################################################
 #######################USER###############################################################
 def user_add(request):
+    lst = Category.objects.all()
     try:
         if request.method == 'POST':
 
@@ -39,12 +40,13 @@ def user_add(request):
             form = UserForm()
     except:
         form = UserForm()
-        return render(request, 'app/signup.html', {'form': form})
+        return render(request, 'app/signup.html', {'form': form, 'lst':lst})
 
-    return render(request, 'app/signup.html', {'form': form})
+    return render(request, 'app/signup.html', {'form': form, 'lst':lst})
 
 
 def user_login(request):
+    lst = Category.objects.all()
     if request.method == 'POST':
 
         try:
@@ -61,7 +63,7 @@ def user_login(request):
     elif request.user.is_authenticated():
         return redirect('app.views.user_home')
 
-    return render(request, 'app/login.html')
+    return render(request, 'app/login.html', {'lst':lst})
 
 
 def user_logout(request):
@@ -84,6 +86,7 @@ def password_change(request):
 # the user is either admin or not admin
 # different view for admin and not admin
 def user_home(request):
+    lst = Category.objects.all()
     if request.user.is_authenticated():
         user = User.objects.get(pk=request.user.id)
         games = Game_info.objects.all()
@@ -94,7 +97,7 @@ def user_home(request):
 
         # if user is not an admin.
         elif not user.is_admin:
-            return render(request, 'app/home.html', {'user': user, 'games': games})
+            return render(request, 'app/home.html', {'user': user, 'games': games, 'lst':lst})
 
     if not request.user.is_authenticated():
         return redirect('app.views.user_login')
@@ -126,6 +129,7 @@ def delete_category(request, pk):
     return redirect('app.views.category')
 
 def gameinfo(request):
+    lst = Category.objects.all()
     if request.method == "POST":
         form = AddGameForm(request.POST)
         if form.is_valid():
@@ -135,4 +139,18 @@ def gameinfo(request):
             return redirect('app.views.user_admin')
     else:
         form = AddGameForm()
-    return render(request, 'app/admin/gameinfo.html', {'form': form})
+    return render(request, 'app/admin/gameinfo.html', {'form': form, 'lst':lst})
+def category_list(request, pk):
+    lst = Category.objects.all()
+    tlst2 = Game_info.objects.all()
+    lst2 = []
+    name = Category.objects.get(pk=pk).name
+    for i in range(len(tlst2)):
+        if(name == tlst2[i].category_id.name):
+            lst2.append(tlst2[i])
+    return render(request, 'app/category_list.html', {'lst':lst,'lst2':lst2, 'name':name})
+
+def gamepage(request, pk): # basic game page feel free to change it
+    lst2 =  Game_info.objects.get(pk=pk)
+    lst = Category.objects.all()
+    return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2})

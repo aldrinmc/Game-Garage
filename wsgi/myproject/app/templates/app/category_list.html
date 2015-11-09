@@ -1,0 +1,21 @@
+{% extends "app/base.html" %}
+
+{% block content %}
+    <br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>{{name}}</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for list in lst2 %}
+                {% if list.is_active == True %}
+                    <tr>
+                        <td><a href="{% url "gamepage" pk=list.pk %}">{{ list.title }}</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

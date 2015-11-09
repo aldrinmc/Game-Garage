@@ -15,7 +15,7 @@
                     <div class="col-md-10 col-sm-9">
                       <div class="row">
                           <div>
-                              <h3><a href="#">{{ list.title }}</a>    <small>({{ list.platform }})</small></h3>
+                              <h3><a href="{% url "gamepage" pk=list.pk %}">{{ list.title }}</a>    <small>({{ list.platform }})</small></h3>
                           </div>
                       </div>
                       <div class="row">

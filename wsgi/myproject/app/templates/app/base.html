@@ -31,8 +31,21 @@
                     <li>
                         <a href="{% url "user_home" %}">Home</a>
                     </li>
-                    <li>
-                        <a href="#">Category</a>
+                    <li class="dropdown">
+                        <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                Category
+                                <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            {% for list in lst %}
+                                {% if list.is_active == True %}
+                                <li>
+                                    <a href="{% url "category_list" pk=list.pk%}"> {{ list.name }} </a>
+                                </li>
+                                {% endif %}
+                            {% endfor %}
+                                
+                        </ul>
                     </li>
                     {% if user.is_authenticated %}
                     <li>
