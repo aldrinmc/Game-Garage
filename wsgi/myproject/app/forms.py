@@ -11,18 +11,27 @@ class UserForm(forms.ModelForm):
             'password': forms.PasswordInput(),
         }
 
-class AddGameForm(forms.ModelForm):
-	# img1 = forms.ImageField()
-	# img2 = forms.ImageField()
-	# img3 = forms.ImageField()
-	# img4 = forms.ImageField()
-	vlink = forms.CharField()
-	class Meta:
-		model = Game_info
-		fields = ['title', 'description', 'platform', 'vlink']
-
 class AddCategoryForm(forms.ModelForm):
-	class Meta:
-		model = Category
-		fields = ['name']
+    class Meta:
+        model = Category
+        fields = ['name']
 
+class AddGameForm(forms.ModelForm):
+    class Meta:
+        model = Game_info
+        fields = ['title', 'description', 'platform']
+
+class ChangePasswordForm(forms.ModelForm):
+    old_password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ['old_password', 'password', 'confirm_password']
+
+        password = forms.CharField(widget=forms.PasswordInput)
+        widgets = {
+            'old_password': forms.PasswordInput(),
+            'password': forms.PasswordInput(),
+            'confirm_password': forms.PasswordInput(),
+        }
