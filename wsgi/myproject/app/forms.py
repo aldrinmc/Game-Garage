@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Game_info, Game_request, Platform, Image, User
+from .models import Category, Game_info, Game_request, Image, User
 from django.forms import ModelForm
 
 class UserForm(forms.ModelForm):
@@ -22,8 +22,6 @@ class AddGameForm(forms.ModelForm):
         model = Game_info
         fields = ['title', 'description']
 
-class Platform(forms.ModelForm):
-    platformlist = forms.ModelMultipleChoiceField(queryset=Platform, to_field_name='platform')
 
 class CategoryForm(forms.ModelForm):
     categorylist = forms.ModelMultipleChoiceField(queryset=Category, to_field_name='category')

@@ -54,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 ###############################################################################
 
 class Category(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -64,17 +64,12 @@ def generate_filename(instance, filename):
     ext = filename.split('.')[-1]
     return 'uploads/' + str(int(time())) + '.' + ext
 
-class Platform(models.Model):
-    name = models.CharField(max_length=50)
-
-    class Meta:
-        ordering = ['name']
 
 class Game_info(models.Model):
     title = models.CharField(max_length=30, unique=True)
     description = models.TextField(max_length=3000)
     category_id = models.ForeignKey(Category)
-    platform_id = models.ForeignKey(Platform)
+    platform = models.CharField(max_length=50)
     rlink = models.CharField(max_length=250, null=True, blank=True)
     vlink = models.CharField(max_length=250, null=True, blank=True)
     is_active = models.BooleanField(default=True)

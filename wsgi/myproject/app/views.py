@@ -3,8 +3,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, CategoryForm, Platform
-from .models import User, Category, Game_info, Game_request
+from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, CategoryForm
+from .models import User, Category, Game_info, Game_request, Image
 from django.http import Http404
 from app import admin
 
@@ -115,9 +115,8 @@ def add_game(request):
             model.save() 
     else:
         form = AddGameForm()
-        platformlist = Platform()
         categorylist = CategoryForm()
-    return render(request, 'app/admin/add_game.html', {'form': form, 'platform': platformlist, 'category': categorylist})
+    return render(request, 'app/admin/add_game.html', {'form': form, 'category': categorylist})
 
 def update_game(request):
     # Display all the game titles
