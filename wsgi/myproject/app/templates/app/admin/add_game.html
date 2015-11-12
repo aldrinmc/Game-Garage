@@ -5,6 +5,8 @@
     <form method="POST" class="post-form">
     	{% csrf_token %}
         {{ form.as_p }}
+        {{ platform }}
+        {{ category }}
         <button type="submit" class="save btn btn-default">Save</button>
     </form>
 {% endblock content %}

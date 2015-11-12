@@ -2,16 +2,14 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^index/$', views.index, name='index'),
+    url(r'category/$', views.category, name='category'),
     url(r'^register/$', views.user_add, name='user_add'),
     url(r'^login/$', views.user_login, name='user_login'),
     url(r'^logout/$', views.user_logout, name='user_logout'),
-    url(r'^home/$', views.user_home, name='user_home'),
     url(r'adminpanel/$', views.user_admin, name='user_admin'),
     url(r'adminpanel/add_game/$', views.add_game, name='add_game'),
     url(r'adminpanel/update_game/$', views.update_game, name='update_game'),
     url(r'adminpanel/delete_game/$', views.delete_game, name='delete_game'),
-    url(r'category/$', views.category, name='category'),
     url(r'^(?P<pk>[0-9]+)/delete_category/$', views.delete_category, name='delete_category'),
     url(r'^gameinfo', views.gameinfo, name='gameinfo'),
     url(r'^(?P<pk>[0-9]+)/category_list/$', views.category_list, name='category_list'),
@@ -20,4 +18,5 @@ urlpatterns = [
     url(r'request', views.requestgame, name='request'),
     url(r'^viewreq/$',views.viewreq, name='viewreq'),
     url(r'^(?P<pk>[0-9]+)/delete_req/$',views.delete_request, name='delete_req'),
+    url(r'', views.user_home, name='user_home'),
 ]

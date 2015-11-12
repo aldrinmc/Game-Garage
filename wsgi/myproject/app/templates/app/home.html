@@ -1,21 +1,23 @@
 {% extends "app/base.html" %}
+{% load staticfiles %}
 
 {% block sidebar %}
 {% endblock sidebar %}
 
 {% block content %}
+    <div class="banner"></div>
     <div class="panel">
         <div class="panel-body">
             {% for list in games %}
                   <div class="row">
                     <br>
                     <div class="col-md-2 col-sm-3 text-center">
-                      <a class="story-img" href="#"><img src="//placehold.it/100" style="width:100px;height:100px" class="img-circle"></a>
+                      <a class="story-img" href="#"><img src="#" style="width:100px;height:100px" class="img-circle"></a>
                     </div>
                     <div class="col-md-10 col-sm-9">
                       <div class="row">
                           <div>
-                              <h3><a href="{% url "gamepage" pk=list.pk %}">{{ list.title }}</a>    <small>({{ list.platform }})</small></h3>
+                              <h3><a href="{% url "gamepage" pk=list.pk %}">{{ list.title }}</a></h3>
                           </div>
                       </div>
                       <div class="row">

@@ -1,2 +1,27 @@
 {% extends "app/admin/base.html" %}
 
+{% block content %}
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Add</button>
+    </form>
+    <br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Game Informations</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for list in lists %}
+                {% if list.is_active == True %}
+                    <tr>
+                        <td>{{ list.title }}</td>
+                        <td><a href="{% url "delete_game" pk=list.pk %}">Delete</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

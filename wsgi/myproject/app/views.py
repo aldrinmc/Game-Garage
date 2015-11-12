@@ -1,18 +1,12 @@
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form
+from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, CategoryForm, Platform
 from .models import User, Category, Game_info, Game_request
 from django.http import Http404
 from app import admin
-
-def index(request):
-    if not request.user.is_authenticated():
-        return render(request, 'app/login.html')
-
-    if request.user.is_authenticated():
-        return redirect('app.views.user_home')
 
 
 #######################USER###############################################################
@@ -97,15 +91,17 @@ def user_home(request):
 
         # if user is not an admin.
         elif not user.is_admin:
-            return render(request, 'app/home.html', {'user': user, 'games': games, 'lst':lst})
+            return render(request, 'app/home.html', {'user': user, 'lst':lst})
 
     if not request.user.is_authenticated():
-        return redirect('app.views.user_login')
+        games = Game_info.objects.all()
+        user = AnonymousUser.id
+        return render(request, 'app/home.html', {'user': user})
 
 ####################### ADMIN DASHBOARD ########################
 
 def user_admin(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_admin:
         admin = User.objects.get(pk=request.user.id)
         return render(request, 'app/admin/index.html', {'user': admin})
     else:
@@ -113,16 +109,29 @@ def user_admin(request):
 
 def add_game(request):
     if request.method == "POST":
-        form = AddGameForm(request.POST)
+        form = AddGameForm(request.POST, request.FILES)
         if form.is_valid():
             model = form.save(commit=False)
             model.save() 
     else:
         form = AddGameForm()
-    return render(request, 'app/admin/add_game.html', {'form': form})
+        platformlist = Platform()
+        categorylist = CategoryForm()
+    return render(request, 'app/admin/add_game.html', {'form': form, 'platform': platformlist, 'category': categorylist})
 
 def update_game(request):
-    return render(request, 'app/admin/update_game.html')
+    # Display all the game titles
+    lists = Game_info.objects.all()
+    if request.method == "POST":
+        form = AddGameForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.category_id = Category.objects.get(pk=1)
+            post.save()
+            return redirect('app.views.user_admin')
+    else:
+        form = AddGameForm()
+    return render(request, 'app/admin/update_game.html', {'form': form, 'lst': lists})
     
 def delete_game(request):
     return render(request, 'app/admin/delete_game.html')
@@ -139,7 +148,7 @@ def category(request):
             return redirect('app.views.category')
     else:
         form = AddCategoryForm()
-        lists = Category.objects.all()
+        lists = Category.objects.order_by('name').all()
     return render(request, 'app/admin/category.html', {'form': form, 'lists': lists})
 
 def delete_category(request, pk):
@@ -164,7 +173,7 @@ def gameinfo(request):
 ################################################################
 
 def category_list(request, pk):
-    lst = Category.objects.all()
+    lst = Category.objects.order_by('name').all()
     tlst2 = Game_info.objects.all()
     lst2 = []
     name = Category.objects.get(pk=pk).name
@@ -184,10 +193,13 @@ def viewreq(request):
 
 
 def requestgame(request ,template_name ='app/request.html'):
-    form = Form(request.POST)
-    if form.is_valid():
-        form.save()
-        return redirect('app.views.user_admin')
+    if request.method == "POST":
+        form = Form(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('app.views.user_admin')
+    else:
+        form = Form()
     return render(request, template_name, {'form':form})
     
 def delete_request(request, pk):
