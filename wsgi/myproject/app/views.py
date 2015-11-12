@@ -115,8 +115,7 @@ def add_game(request):
             model.save() 
     else:
         form = AddGameForm()
-        categorylist = CategoryForm()
-    return render(request, 'app/admin/add_game.html', {'form': form, 'category': categorylist})
+    return render(request, 'app/admin/add_game.html', {'form': form})
 
 def update_game(request):
     # Display all the game titles

@@ -20,7 +20,7 @@ class AddCategoryForm(forms.ModelForm):
 class AddGameForm(forms.ModelForm):
     class Meta:
         model = Game_info
-        fields = ['title', 'description']
+        fields = ['title', 'description', 'platform','rlink','vlink','category_id']
 
 
 class CategoryForm(forms.ModelForm):
