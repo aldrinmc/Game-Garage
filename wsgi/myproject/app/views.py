@@ -1,13 +1,10 @@
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
-from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, CategoryForm
+from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm
 from .models import User, Category, Game_info, Game_request, Image
-from django.http import Http404
-from app import admin
-
 
 #######################USER###############################################################
 #######################USER###############################################################
@@ -62,7 +59,7 @@ def user_login(request):
 
 def user_logout(request):
     logout(request)
-    return redirect('app.views.user_login')
+    return redirect('app.views.user_home')
 
 def password_change(request):
     if request.method == "POST":
@@ -84,39 +81,51 @@ def user_home(request):
     if request.user.is_authenticated():
         user = User.objects.get(pk=request.user.id)
         games = Game_info.objects.all()
-
+        image = Image.objects.all()
         # if user is an admin
         if user.is_admin:
             return redirect('app.views.user_admin')
 
         # if user is not an admin.
         elif not user.is_admin:
-            return render(request, 'app/home.html', {'user': user, 'lst':lst})
+            return render(request, 'app/home.html', {'user': user, 'lst': lst, 'games': games, 'image': image})
 
     if not request.user.is_authenticated():
+        image = Image.objects.all()
         games = Game_info.objects.all()
         user = AnonymousUser.id
-        return render(request, 'app/home.html', {'user': user})
+        return render(request, 'app/home.html', {'user': user, 'lst': lst, 'games': games, 'image': image})
 
 ####################### ADMIN DASHBOARD ########################
 
 def user_admin(request):
-    if request.user.is_authenticated() and request.user.is_admin:
+    if request.user.is_authenticated():
         admin = User.objects.get(pk=request.user.id)
         return render(request, 'app/admin/index.html', {'user': admin})
     else:
-        return redirect('app.views.user_login')
+        return redirect('app.views.user_home')
 
+@login_required
 def add_game(request):
     if request.method == "POST":
-        form = AddGameForm(request.POST, request.FILES)
-        if form.is_valid():
+        form = AddGameForm(request.POST)
+        image_form = ImageForm(request.POST, request.FILES)
+        if form.is_valid() and image_form.is_valid():
             model = form.save(commit=False)
-            model.save() 
+            image = image_form.save(commit=False)
+            model.save()
+            image.save()
+            form.save_m2m()
+            game_id = Game_info.objects.get(id=model.pk)
+            image.game_id = game_id
+            image.save()
+
     else:
         form = AddGameForm()
-    return render(request, 'app/admin/add_game.html', {'form': form})
+        image_form = ImageForm()
+    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form})
 
+@login_required
 def update_game(request):
     # Display all the game titles
     lists = Game_info.objects.all()
@@ -130,15 +139,24 @@ def update_game(request):
     else:
         form = AddGameForm()
     return render(request, 'app/admin/update_game.html', {'form': form, 'lst': lists})
-    
+
+@login_required
 def delete_game(request):
-    return render(request, 'app/admin/delete_game.html')
+    if request.user.is_admin:
+        return render(request, 'app/admin/delete_game.html')
+    else:
+        return redirect('app.views.user_home')
 
+@login_required
 def requested_games(request):
-    return render(request, 'app/admin/requested_games.html')
+    if request.user.is_admin:
+        return render(request, 'app/admin/requested_games.html')
+    else:
+        return redirect('app.views.user_home')
 
+@login_required
 def category(request):
-    if request.method == "POST":
+    if request.method == "POST" and request.user.is_admin:
         form = AddCategoryForm(request.POST)
         if form.is_valid():
             post = form.save(commit=False)
@@ -149,6 +167,7 @@ def category(request):
         lists = Category.objects.order_by('name').all()
     return render(request, 'app/admin/category.html', {'form': form, 'lists': lists})
 
+@login_required
 def delete_category(request, pk):
     lists = Category.objects.get(pk=pk)
     lists.is_active = False
@@ -166,42 +185,42 @@ def gameinfo(request):
             return redirect('app.views.user_admin')
     else:
         form = AddGameForm()
-    return render(request, 'app/admin/gameinfo.html', {'form': form, 'lst':lst})
+        return render(request, 'app/admin/gameinfo.html', {'form': form, 'lst':lst})
 
 ################################################################
 
 def category_list(request, pk):
     lst = Category.objects.order_by('name').all()
-    tlst2 = Game_info.objects.all()
+    tlst2 = Game_info.objects.filter(category_id=pk).all()
     lst2 = []
-    name = Category.objects.get(pk=pk).name
-    for i in range(len(tlst2)):
-        if(name == tlst2[i].category_id.name):
-            lst2.append(tlst2[i])
-    return render(request, 'app/category_list.html', {'lst':lst,'lst2':lst2, 'name':name})
+    name = Category.objects.get(pk=pk)
+    return render(request, 'app/category_list.html', {'lst':lst,'lst2':tlst2, 'name':name})
 
 def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
     lst = Category.objects.all()
     return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2})
 
+@login_required
 def viewreq(request):
     lists=Game_request.objects.all()
     return render(request, 'app/admin/requested.html', {'lists': lists})
 
-
-def requestgame(request ,template_name ='app/request.html'):
+@login_required
+def requestgame(request, template_name='app/request.html'):
     if request.method == "POST":
         form = Form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('app.views.user_admin')
+            return redirect('app.views.user_home')
     else:
         form = Form()
     return render(request, template_name, {'form':form})
-    
+
+@login_required
 def delete_request(request, pk):
     lists = Game_request.objects.get(pk=pk)
     lists.is_active = False
     lists.save()
     return redirect('app.views.viewreq')
+

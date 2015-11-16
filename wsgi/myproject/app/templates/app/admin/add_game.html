@@ -2,11 +2,10 @@
 
 {% block content %}
  <h1>Add New Game Information</h1>
-    <form method="POST" class="post-form">
+    <form method="POST" class="post-form" enctype="multipart/form-data">
     	{% csrf_token %}
         {{ form.as_p }}
-        {{ platform }}
-        {{ category }}
-        <button type="submit" class="save btn btn-default">Save</button>
+        {{ image.as_p }}
+        <button type="submit" value="Upload" class="save btn btn-default">Save</button>
     </form>
 {% endblock content %}

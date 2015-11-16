@@ -40,16 +40,19 @@ class Migration(migrations.Migration):
             name='Category',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=20)),
+                ('name', models.CharField(max_length=50)),
                 ('is_active', models.BooleanField(default=True)),
             ],
+            options={
+                'ordering': ['name'],
+            },
         ),
         migrations.CreateModel(
             name='Feedback',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('comment', models.TextField(max_length=300)),
-                ('created_date', models.DateTimeField(default=datetime.datetime(2015, 11, 12, 4, 30, 41, 504869, tzinfo=utc), null=True, blank=True)),
+                ('created_date', models.DateTimeField(default=datetime.datetime(2015, 11, 16, 10, 10, 0, 659637, tzinfo=utc), null=True, blank=True)),
                 ('published_date', models.DateTimeField(null=True, blank=True)),
                 ('rating', models.IntegerField()),
                 ('is_active', models.BooleanField(default=True)),
@@ -62,10 +65,11 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(unique=True, max_length=30)),
                 ('description', models.TextField(max_length=3000)),
-                ('rlink', models.CharField(max_length=250, null=True, blank=True)),
-                ('vlink', models.CharField(max_length=250, null=True, blank=True)),
+                ('platform', models.CharField(max_length=50)),
+                ('redirectlink', models.CharField(max_length=250, null=True, blank=True)),
+                ('youtubelink', models.CharField(max_length=250, null=True, blank=True)),
                 ('is_active', models.BooleanField(default=True)),
-                ('category_id', models.ForeignKey(to='app.Category')),
+                ('category_id', models.ManyToManyField(to='app.Category')),
             ],
         ),
         migrations.CreateModel(
@@ -73,7 +77,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=30)),
-                ('created_date', models.DateTimeField(default=datetime.datetime(2015, 11, 12, 4, 30, 41, 507203, tzinfo=utc), null=True, blank=True)),
+                ('created_date', models.DateTimeField(default=datetime.datetime(2015, 11, 16, 10, 10, 0, 661246, tzinfo=utc), null=True, blank=True)),
                 ('published_date', models.DateTimeField(null=True, blank=True)),
                 ('is_active', models.BooleanField(default=True)),
                 ('user', models.ForeignKey(blank=True, to=settings.AUTH_USER_MODEL, null=True)),
@@ -83,30 +87,12 @@ class Migration(migrations.Migration):
             name='Image',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('img_name', models.CharField(max_length=250)),
-                ('thumbnail_name', models.CharField(max_length=250)),
-                ('uploaded_date', models.DateTimeField(auto_now_add=True)),
                 ('thumbnail', models.ImageField(upload_to=app.models.generate_filename)),
-                ('img', models.ImageField(upload_to=app.models.generate_filename)),
-                ('game_id', models.ForeignKey(to='app.Game_info')),
+                ('img1', models.ImageField(upload_to=app.models.generate_filename)),
+                ('img2', models.ImageField(upload_to=app.models.generate_filename)),
+                ('img3', models.ImageField(upload_to=app.models.generate_filename)),
+                ('img4', models.ImageField(upload_to=app.models.generate_filename)),
+                ('game_id', models.ForeignKey(blank=True, to='app.Game_info', null=True)),
             ],
-            options={
-                'ordering': ['img_name'],
-            },
-        ),
-        migrations.CreateModel(
-            name='Platform',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=50)),
-            ],
-            options={
-                'ordering': ['name'],
-            },
-        ),
-        migrations.AddField(
-            model_name='game_info',
-            name='platform_id',
-            field=models.ForeignKey(to='app.Platform'),
         ),
     ]

@@ -1,4 +1,5 @@
 from datetime import time
+from django.utils.crypto import get_random_string
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
@@ -59,36 +60,34 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+    class Meta:
+        ordering = ['name']
 
 def generate_filename(instance, filename):
     ext = filename.split('.')[-1]
-    return 'uploads/' + str(int(time())) + '.' + ext
+    return 'uploads/' + get_random_string(length=25) + '.' + ext
 
 
 class Game_info(models.Model):
     title = models.CharField(max_length=30, unique=True)
     description = models.TextField(max_length=3000)
-    category_id = models.ForeignKey(Category)
+    category_id = models.ManyToManyField(Category)
     platform = models.CharField(max_length=50)
-    rlink = models.CharField(max_length=250, null=True, blank=True)
-    vlink = models.CharField(max_length=250, null=True, blank=True)
+    redirectlink = models.CharField(max_length=250, null=True, blank=True)
+    youtubelink = models.CharField(max_length=250, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
 
 class Image(models.Model):
-    img_name = models.CharField(max_length=250)
-    thumbnail_name = models.CharField(max_length=250)
-    uploaded_date = models.DateTimeField(auto_now_add=True)
     thumbnail = models.ImageField(upload_to=generate_filename)
-    img = models.ImageField(upload_to=generate_filename)
-    game_id = models.ForeignKey(Game_info)
+    img1 = models.ImageField(upload_to=generate_filename)
+    img2 = models.ImageField(upload_to=generate_filename)
+    img3 = models.ImageField(upload_to=generate_filename)
+    img4 = models.ImageField(upload_to=generate_filename)
+    game_id = models.ForeignKey(Game_info, null=True, blank=True)
 
-    def __unicode__(self):
-        return self.img_name
-    class Meta:
-        ordering = ['img_name']
 
 
 class Feedback(models.Model):

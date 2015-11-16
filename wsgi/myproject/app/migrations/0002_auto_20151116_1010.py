@@ -16,11 +16,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='feedback',
             name='created_date',
-            field=models.DateTimeField(default=datetime.datetime(2015, 11, 12, 4, 30, 48, 745055, tzinfo=utc), null=True, blank=True),
+            field=models.DateTimeField(default=datetime.datetime(2015, 11, 16, 10, 10, 6, 594262, tzinfo=utc), null=True, blank=True),
         ),
         migrations.AlterField(
             model_name='game_request',
             name='created_date',
-            field=models.DateTimeField(default=datetime.datetime(2015, 11, 12, 4, 30, 48, 747100, tzinfo=utc), null=True, blank=True),
+            field=models.DateTimeField(default=datetime.datetime(2015, 11, 16, 10, 10, 6, 595905, tzinfo=utc), null=True, blank=True),
         ),
     ]

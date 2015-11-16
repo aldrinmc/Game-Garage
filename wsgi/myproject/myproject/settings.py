@@ -116,14 +116,14 @@ if ON_OPENSHIFT:
     }
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'GGdb',
-            'USER': 'test',
-            'PASSWORD': 'asdasd',
-            'HOST': 'localhost',
-            'PORT': '5432',
-        }
+	    'default': {
+	        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+	        'NAME': 'game3',
+	        'USER': 'gamers2',
+	        'PASSWORD': 'asdasd',
+	        'HOST': 'localhost',
+	       'PORT': '',
+	    }
     }
 
 # Internationalization
@@ -142,9 +142,12 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
-PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PROJECT_PATH, 'static')
+if ON_OPENSHIFT:
+	STATIC_ROOT = os.environ['OPENSHIFT_REPO_DIR'] + 'wsgi/static/' 
+else:
+	STATIC_ROOT = os.path.join(BASE_DIR, 'wsgi/static/')
 
 
 AUTH_USER_MODEL = "app.User"
+MEDIA_ROOT = os.path.join(WSGI_DIR, '..' , '/static/images').replace('\\','/')
