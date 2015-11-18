@@ -208,6 +208,7 @@ def viewreq(request):
 
 @login_required
 def requestgame(request, template_name='app/request.html'):
+    lst = Category.objects.all()
     if request.method == "POST":
         form = Form(request.POST)
         if form.is_valid():
@@ -215,7 +216,7 @@ def requestgame(request, template_name='app/request.html'):
             return redirect('app.views.user_home')
     else:
         form = Form()
-    return render(request, template_name, {'form':form})
+    return render(request, template_name, {'form':form, 'lst':lst})
 
 @login_required
 def delete_request(request, pk):
