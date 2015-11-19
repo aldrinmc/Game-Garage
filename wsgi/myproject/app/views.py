@@ -212,7 +212,7 @@ def gamepage(request, pk): # basic game page feel free to change it
             form = FeedbackForm()
         return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'form':form,'lst3':lst3})
     else:
-        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2})
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2,'lst3':lst3})
 
 @login_required
 def viewreq(request):
