@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Game_info, Game_request, Image, User
+from .models import Category, Game_info, Game_request, Image, User, Feedback
 from django.forms import ModelForm
 
 class UserForm(forms.ModelForm):
@@ -52,3 +52,8 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         fields = ['thumbnail', 'img1', 'img2', 'img3', 'img4']
+        
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['comment', 'rating' ]

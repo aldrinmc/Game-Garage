@@ -96,6 +96,7 @@ class Feedback(models.Model):
     published_date = models.DateTimeField(blank=True, null=True)
     rating = models.IntegerField()
     user = models.ForeignKey(User)
+    game = models.ForeignKey(Game_info, default=1)
     is_active = models.BooleanField(default=True)
 
 class Game_request(models.Model):

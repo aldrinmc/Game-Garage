@@ -3,8 +3,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm
-from .models import User, Category, Game_info, Game_request, Image
+from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm, FeedbackForm
+from .models import User, Category, Game_info, Game_request, Image, Feedback
 
 #######################USER###############################################################
 #######################USER###############################################################
@@ -199,7 +199,20 @@ def category_list(request, pk):
 def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
     lst = Category.objects.all()
-    return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2})
+    lst3 = Feedback.objects.filter(game=pk).all()
+    if request.user.is_authenticated():
+        if request.method == "POST":
+            form = FeedbackForm(request.POST)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.user = request.user
+                post.game = lst2
+                post.save()
+        else:
+            form = FeedbackForm()
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'form':form,'lst3':lst3})
+    else:
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2})
 
 @login_required
 def viewreq(request):
