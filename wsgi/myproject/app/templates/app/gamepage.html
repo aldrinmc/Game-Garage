@@ -11,4 +11,24 @@
     {{ lst2.description }}
 </li>
 </ul>
+<table class="table table-bordered">
+    {% for list in lst3 %}
+        <thead>
+            <tr>
+            <th>Author: {{list.user.get_full_name}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+            <td>{{ list.comment }}</td>
+            </tr>
+        </tbody>
+    {% endfor %}
+    </table>
+    {% if user.is_authenticated %}
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="save btn btn-default">Post</button>
+        </form>
+    {% endif %}
 {% endblock %}
