@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^logout/$', views.user_logout, name='user_logout'),
     url(r'adminpanel/$', views.user_admin, name='user_admin'),
     url(r'adminpanel/add_game/$', views.add_game, name='add_game'),
+    url(r'adminpanel/viewgames/$', views.view_games, name='view_games'),
     url(r'adminpanel/update_game/$', views.update_game, name='update_game'),
     url(r'adminpanel/delete_game/$', views.delete_game, name='delete_game'),
     url(r'^(?P<pk>[0-9]+)/delete_category/$', views.delete_category, name='delete_category'),

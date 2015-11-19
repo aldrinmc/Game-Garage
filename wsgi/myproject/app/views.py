@@ -126,6 +126,11 @@ def add_game(request):
     return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form})
 
 @login_required
+def view_games(request):
+    lists=Game_info.objects.all()
+    return render(request, 'app/admin/view_games.html', {'lists': lists})
+
+@login_required
 def update_game(request):
     # Display all the game titles
     lists = Game_info.objects.all()

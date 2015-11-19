@@ -150,13 +150,16 @@
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-edit"></i> Game info <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
-                                <a href="{% url "add_game" %}">Add Game</a>
+                                <a href="{% url "add_game" %}">Add Games</a>
                             </li>
                             <li>
-                                <a href="{% url "update_game" %}">Update Game</a>
+                                <a href="#">View Games</a>
                             </li>
                             <li>
-                                <a href="{% url "delete_game" %}">Delete Game</a>
+                                <a href="{% url "update_game" %}">Update Games</a>
+                            </li>
+                            <li>
+                                <a href="{% url "delete_game" %}">Delete Games</a>
                             </li>
                         </ul>
                     </li>
