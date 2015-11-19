@@ -187,6 +187,19 @@ def gameinfo(request):
         form = AddGameForm()
         return render(request, 'app/admin/gameinfo.html', {'form': form, 'lst':lst})
 
+
+def request_password(request):
+    if request.method == 'POST':
+        subject = 'Your password'
+        message = 'my password'
+        from_email = request.POST['email']
+        user_email = User.objects.get(email=from_email)
+        send_mail(subject, message, 'nparadiang483', [from_email], fail_silently=False)
+       
+        return redirect('app.views.user_login')
+
+    return render(request, 'app/recover_password.html')
+
 ################################################################
 
 def category_list(request, pk):

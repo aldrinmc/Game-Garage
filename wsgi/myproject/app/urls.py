@@ -18,5 +18,6 @@ urlpatterns = [
     url(r'request', views.requestgame, name='request'),
     url(r'^viewreq/$',views.viewreq, name='viewreq'),
     url(r'^(?P<pk>[0-9]+)/delete_req/$',views.delete_request, name='delete_req'),
+    url(r'^recover_password/$',views.request_password, name='request_password'),
     url(r'', views.user_home, name='user_home'),
 ]

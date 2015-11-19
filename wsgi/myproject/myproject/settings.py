@@ -54,6 +54,18 @@ ALLOWED_HOSTS = [
     #'www.example.com', # Second DNS alias (set up in the app)
 ]
 
+EMAIL_USE_TLS = True
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+
+EMAIL_PORT = 587
+
+EMAIL_BACKEND = 'sgbackend.SendGridBackend'
+
+SENDGRID_USER = 'nparadiang483'
+
+SENDGRID_PASSWORD = 'gamers123'
+
 
 # Application definition
 
