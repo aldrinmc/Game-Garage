@@ -1,24 +1,39 @@
+
 {% extends "app/base.html" %}
 
 {% block content %}
-    <h1>SignUp</h1>
-      <form method="POST" class="form-inline" role="form">
-        {% csrf_token %}
-        <div class="form-group">
-          <input name="fname" type="text" class="form-control" placeholder=" first name" required>
-        </div>
-        <div class="form-group">
-          <input name="lname" type="text" class="form-control" placeholder=" last name" required>
-        </div><br>
-        <div class="form-group">
-          <input name="contact_number" type="text" class="form-control" placeholder=" contact number" required>
-        </div>
-        <div class="form-group">
-          <input name="email" type="email" class="form-control" placeholder=" email" required>
-        </div><br>
-        <div class="form-group">
-          <input name="password" type="password" class="form-control" placeholder=" password" required>
-        </div><br>
-            <button type="submit" class="save btn btn-default">Signup</button>
-        </form>
-{% endblock %}
+    <div class="container">
+    <div class="row vertical-offset-100">
+    <div class="col-md-4 col-md-offset-4">
+    <div class="panel panel-default">
+    <div class="panel-heading">
+    <h3 class="panel-title">Sign up</h3>
+    </div>
+          <div class="panel-body">
+            <form method="POST" accept-charset="UTF-8" role="form">
+                {% csrf_token %}
+                <fieldset>
+                    <div class="form-group">
+                        <input name="fname" type="text" class="form-control" placeholder="First Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="lname" type="text" class="form-control" placeholder="Last Name" required>
+                    </div><br>
+                    <div class="form-group">
+                        <input name="contact_number" type="text" class="form-control" placeholder="Contact Number" required>
+                    </div>
+                    <div class="form-group">
+                        <input name="email" type="email" class="form-control" placeholder="Email" required>
+                    </div><br>
+                    <div class="form-group">
+                        <input name="password" type="password" class="form-control" placeholder="Password" required>
+                    </div><br>
+                    <button type="submit" class="save btn btn-default">Signup</button>
+                </fieldset>
+            </form>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+{% endblock content %}
