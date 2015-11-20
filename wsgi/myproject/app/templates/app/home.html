@@ -9,12 +9,12 @@
     <div class="panel">
         <div class="panel-body">
             {% for list in games %}
-                <div class="row">
+                <div class="row" style="padding-left: 40px">
                     <br>
                     {% for i in image %}
                         {% if i.game_id.pk == list.pk %}
                             <div class="col-md-2 col-sm-3 text-center">
-                                <a class="story-img" href="#"><img src="/static/images/{{ i.thumbnail }}" style="width:129px;height:120px" class="img-circle"></a>
+                                <a class="story-img" href="#"><img src="/static/images/{{ i.thumbnail }}" style="width:200px;height:150px" class="img-rounded"></a>
                             </div>
                         {% endif %}
                     {% endfor %}
