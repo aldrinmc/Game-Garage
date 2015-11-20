@@ -218,6 +218,7 @@ def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
     lst = Category.objects.all()
     lst3 = Feedback.objects.filter(game=pk).all()
+    image = Image.objects.get(game_id=lst2)
     if request.user.is_authenticated():
         if request.method == "POST":
             form = FeedbackForm(request.POST)
@@ -228,9 +229,9 @@ def gamepage(request, pk): # basic game page feel free to change it
                 post.save()
         else:
             form = FeedbackForm()
-        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'form':form,'lst3':lst3})
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'form':form, 'lst3': lst3, 'image': image})
     else:
-        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2})
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'lst3': lst3, 'image': image})
 
 @login_required
 def viewreq(request):
