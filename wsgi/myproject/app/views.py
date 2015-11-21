@@ -24,6 +24,7 @@ def user_add(request):
             user.first_name = fname
             user.last_name = lname
             user.contact_number = contact_number
+            signup_success = True
             user.save()
             return redirect('app.views.user_login')
 
@@ -241,11 +242,13 @@ def viewreq(request):
 @login_required
 def requestgame(request, template_name='app/request.html'):
     lst = Category.objects.all()
+    form2 = Form()
     if request.method == "POST":
         form = Form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('app.views.user_home')
+            req_success = True
+            return render(request, 'app/request.html', {'lst':lst, 'req_success':req_success, 'form':form2})
     else:
         form = Form()
     return render(request, template_name, {'form':form, 'lst':lst})
