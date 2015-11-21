@@ -5,11 +5,28 @@
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="thumbnail">
-                <img class="img-responsive" src="http://placehold.it/800x300" alt="">
-
+    <!-- slider code start -->
+              <div class="row clearfix">
+                  <div class="col span_6 fwImage">
+                <div id="video-gallery" class="royalSlider videoGallery rsDefault">
+                  <a class="rsImg" data-rsw="843" data-rsh="473" data-rsVideo="http://www.youtube.com/watch?v=HFbHRWwyihE" href="http://dimsemenov.com/plugins/royal-slider/img/admin-video.png">
+                    <div class="rsTmb">
+                      <h5>New RoyalSlider</h5>
+                      <span>by Dmitry Semenov</span>
+                    </div>
+                  </a>
+                   <a class="rsImg" data-rsVideo="https://vimeo.com/45830194" href="http://b.vimeocdn.com/ts/319/715/319715493_640.jpg">
+                    <div class="rsTmb">
+                      <h5>Stanley Piano</h5>
+                      <span>by Digital Kitchen</span>
+                    </div>
+                  </a>
+         
+            </div>
+            </div>
+            </div>
                 <div class="caption-full">
-                    <h2><a href="#">{{ lst2.title }}</a>
-                    </h2>
+                    <h2>{{ lst2.title }}</h2>
                     <hr>
                     <h4><strong>Description</strong></h4>
 
@@ -20,7 +37,7 @@
                     <div class="row">
                         <div class="col-md-1"></div>
                         <div class="col-md-5">
-                            <h5><strong>minimum</strong></h5>
+                            <h3><small>minimum</small></h3>
                             <hr>
                             <p><strong>OS: </strong></p>
 
@@ -35,7 +52,7 @@
                             <p><strong>Hard Drive: </strong></p>
                         </div>
                         <div class="col-md-5">
-                            <h5><strong>recommend</strong></h5>
+                            <h3><small>recommend</small></h3>
                             <hr>
                             <p><strong>OS: </strong></p>
 
@@ -139,4 +156,44 @@
             </div>
         </div>
     </div>
+
+    <script>
+    jQuery(document).ready(function($) {
+      $('#video-gallery').royalSlider({
+        arrowsNav: false,
+        fadeinLoadedSlide: true,
+        controlNavigationSpacing: 0,
+        controlNavigation: 'thumbnails',
+
+        thumbs: {
+          autoCenter: false,
+          fitInViewport: true,
+          orientation: 'vertical',
+          spacing: 0,
+          paddingBottom: 0
+        },
+        keyboardNavEnabled: true,
+        imageScaleMode: 'fill',
+        imageAlignCenter:true,
+        slidesSpacing: 0,
+        loop: false,
+        loopRewind: true,
+        numImagesToPreload: 3,
+        video: {
+          autoHideArrows:true,
+          autoHideControlNav:false,
+          autoHideBlocks: true
+        }, 
+        autoScaleSlider: true, 
+        autoScaleSliderWidth: 960,     
+        autoScaleSliderHeight: 450,
+
+        /* size of all images http://help.dimsemenov.com/kb/royalslider-jquery-plugin-faq/adding-width-and-height-properties-to-images */
+        imgWidth: 640,
+        imgHeight: 360
+
+      });
+    });
+    </script>
+
 {% endblock %}
