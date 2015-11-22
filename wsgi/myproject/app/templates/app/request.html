@@ -3,12 +3,9 @@
 
 {% block content %}
     <h1>Request Game</h1>
-    {% if req_success == True %}
-    <div class="alert alert-success">You have successfully requested a game</div>
-    {% endif %}
     <form method="POST" class="post-form">
     	{% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="save btn btn-default">Save</button>
-    </form>  
+    </form>
 {% endblock content %}
