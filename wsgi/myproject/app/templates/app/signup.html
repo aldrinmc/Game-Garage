@@ -1,39 +1,60 @@
-
 {% extends "app/base.html" %}
 
 {% block content %}
-    <div class="container">
-    <div class="row vertical-offset-100">
-    <div class="col-md-4 col-md-offset-4">
-    <div class="panel panel-default">
-    <div class="panel-heading">
-    <h3 class="panel-title">Sign up</h3>
-    </div>
-          <div class="panel-body">
-            <form method="POST" accept-charset="UTF-8" role="form">
-                {% csrf_token %}
-                <fieldset>
-                    <div class="form-group">
-                        <input name="fname" type="text" class="form-control" placeholder="First Name" required>
+    <div class="container" style="padding-top: 50px">
+        <div class="row vertical-offset-100">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Sign up</h3>
                     </div>
-                    <div class="form-group">
-                        <input name="lname" type="text" class="form-control" placeholder="Last Name" required>
-                    </div><br>
-                    <div class="form-group">
-                        <input name="contact_number" type="text" class="form-control" placeholder="Contact Number" required>
+                    <div class="panel-body">
+                        <form method="POST" accept-charset="UTF-8" role="form" id="myform">
+                            {% csrf_token %}
+                            <fieldset>
+                                <div class="form-group">
+                                    <input name="fname" type="text" class="form-control" placeholder="First Name"
+                                           required>
+                                </div>
+                                <div class="form-group">
+                                    <input name="lname" type="text" class="form-control" placeholder="Last Name"
+                                           required>
+                                </div>
+                                <div class="form-group">
+                                    <input name="contact_number" type="text" class="form-control"
+                                           placeholder="Contact Number" required>
+                                </div>
+                                <div class="form-group">
+                                    <input name="email" type="email" class="form-control" placeholder="Email" required>
+                                </div>
+                                <div class="form-group">
+                                    <input id="password" name="password" type="password" class="form-control" placeholder="Password"
+                                           required>
+                                </div>
+                                <div class="form-group">
+                                    <input id="password_again" name="password_again" type="password" class="form-control" placeholder="Confirm Password"
+                                           required>
+                                </div>
+                                <button type="submit" class="save btn btn-default" value="Validate!">Signup</button>
+                            </fieldset>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <input name="email" type="email" class="form-control" placeholder="Email" required>
-                    </div><br>
-                    <div class="form-group">
-                        <input name="password" type="password" class="form-control" placeholder="Password" required>
-                    </div><br>
-                    <button type="submit" class="save btn btn-default">Signup</button>
-                </fieldset>
-            </form>
+                </div>
+            </div>
+        </div>
     </div>
-    </div>
-    </div>
-    </div>
-    </div>
+    <script>
+        jQuery.validator.setDefaults({
+            debug: true,
+            success: "valid"
+        });
+        $("#myform").validate({
+            rules: {
+                password: "required",
+                password_again: {
+                    equalTo: "#password"
+                }
+            }
+        });
+    </script>
 {% endblock content %}
