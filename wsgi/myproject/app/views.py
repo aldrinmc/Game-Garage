@@ -161,7 +161,7 @@ def update_game(request, pk):
     return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form})    
 
 @login_required
-def delete_game(request):
+def delete_game(request, pk):
     lists = Game_info.objects.get(pk=pk)
     lists.is_active = False
     lists.save()
