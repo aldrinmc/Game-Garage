@@ -188,7 +188,7 @@
                                 <span class="glyphicon glyphicon-star-empty"></span>
                             {% endif %}
                             {{ list.user.get_full_name }}
-                            <span class="pull-right">10 days ago</span>
+                            <span class="pull-right">{{ list.created_date }}</span>
 
                             <p>{{ list.comment }}</p>
                         </div>
