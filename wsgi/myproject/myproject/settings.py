@@ -162,4 +162,4 @@ else:
 
 
 AUTH_USER_MODEL = "app.User"
-MEDIA_ROOT = os.path.join(WSGI_DIR, '..' , '/static/images').replace('\\','/')
+MEDIA_ROOT = os.path.join(WSGI_DIR, '..' , 'app/static/images').replace('\\','/')
