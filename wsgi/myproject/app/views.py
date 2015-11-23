@@ -135,26 +135,33 @@ def view_games(request):
     return render(request, 'app/admin/view_games.html', {'lists': lists})
 
 @login_required
-def update_game(request):
-    # Display all the game titles
-    lists = Game_info.objects.all()
+def update_game(request, pk):
+    post = get_object_or_404(Game_info, pk=pk)
+    post_image = get_object_or_404(Image, game_id=pk)
     if request.method == "POST":
-        form = AddGameForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.category_id = Category.objects.get(pk=1)
-            post.save()
-            return redirect('app.views.user_admin')
+        form = AddGameForm(request.POST, instance=post)
+        image_form = ImageForm(request.POST, request.FILES, instance=post_image)
+        if form.is_valid() and image_form.is_valid():
+            model = form.save(commit=False)
+            image = image_form.save(commit=False)
+            model.save()
+            image.save()
+            form.save_m2m()
+            game_id = Game_info.objects.get(id=model.pk)
+            image.game_id = game_id
+            image.save()
+
     else:
-        form = AddGameForm()
-    return render(request, 'app/admin/update_game.html', {'form': form, 'lst': lists})
+        form = AddGameForm(instance=post)
+        image_form = ImageForm(instance=post_image)
+    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form})    
 
 @login_required
 def delete_game(request):
-    if request.user.is_admin:
-        return render(request, 'app/admin/delete_game.html')
-    else:
-        return redirect('app.views.user_home')
+    lists = Game_info.objects.get(pk=pk)
+    lists.is_active = False
+    lists.save()
+    return redirect('app.views.view_games')  
 
 @login_required
 def requested_games(request):

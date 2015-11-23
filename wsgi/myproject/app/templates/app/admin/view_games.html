@@ -4,7 +4,7 @@
     <table class="table table-bordered">
         <thead>
         <tr>
-            <th>Games</th>
+            <h1>Games</h1><br>
         </tr>
         </thead>
         <tbody>
@@ -12,7 +12,8 @@
                 {% if list.is_active == True %}
                     <tr>
                         <td>{{ list.title }}</td>
-                        <!--td><a href="{% url "delete_req" pk=list.pk %}">Delete</a></td-->
+                        <td><a href="{% url "update_game" pk=list.pk %}">Update Game</a></td>
+                        <td><a href="{% url "delete_game" pk=list.pk %}">Delete Game</a></td>
                     </tr>
                 {% endif %}
             {% endfor %}
