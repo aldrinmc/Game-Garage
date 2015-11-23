@@ -1,15 +1,88 @@
 {% extends "app/base.html" %}
 
 {% block content %}
-    <div class="row">
+    <div class="row" style="padding-top: 50px">
         <div class="col-md-2"></div>
         <div class="col-md-8">
             <div class="thumbnail">
-                <img class="img-responsive" src="http://placehold.it/800x300" alt="">
+                <!-- slider code start -->
+                <div class="row clearfix">
+                    <div class="col span_6 fwImage">
+                        <div id="video-gallery" class="royalSlider videoGallery rsDefault">
+                            <a class="rsImg" data-rsw="843" data-rsh="473"
+                               data-rsVideo="http://www.youtube.com/watch?v=HFbHRWwyihE"
+                               href="/static/images/{{ image.thumbnail }}">
+                                <div class="rsTmb">
+                                    <h5>Game Trailer</h5>
+                                </div>
+                            </a>
+                            <a class="rsImg"
+                               href="/static/images/{{ image.img1 }}">
+                                <div class="rsTmb">
+                                    <h5>Screenshot #1</h5>
+                                </div>
+                            </a>
+                            <a class="rsImg"
+                               href="/static/images/{{ image.img2 }}">
+                                <div class="rsTmb">
+                                   <h5>Screenshot #2</h5>
+                                </div>
+                            </a>
+                            <a class="rsImg"
+                               href="/static/images/{{ image.img3 }}">
+                                <div class="rsTmb">
+                                    <h5>Screenshot #3</h5>
+                                </div>
+                            </a>
+                            <a class="rsImg"
+                               href="/static/images/{{ image.img4 }}">
+                                <div class="rsTmb">
+                                    <h5>Screenshot #4</h5>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
 
-                <div class="caption-full">
-                    <h2><a href="#">{{ lst2.title }}</a>
-                    </h2>
+                <script id="addJS">jQuery(document).ready(function ($) {
+                    $('#video-gallery').royalSlider({
+                        arrowsNav: false,
+                        fadeinLoadedSlide: true,
+                        controlNavigationSpacing: 0,
+                        controlNavigation: 'thumbnails',
+
+                        thumbs: {
+                            autoCenter: false,
+                            fitInViewport: true,
+                            orientation: 'vertical',
+                            spacing: 0,
+                            paddingBottom: 0
+                        },
+                        keyboardNavEnabled: true,
+                        imageScaleMode: 'fill',
+                        imageAlignCenter: true,
+                        slidesSpacing: 0,
+                        loop: false,
+                        loopRewind: true,
+                        numImagesToPreload: 3,
+                        video: {
+                            autoHideArrows: true,
+                            autoHideControlNav: false,
+                            autoHideBlocks: true
+                        },
+                        autoScaleSlider: true,
+                        autoScaleSliderWidth: 960,
+                        autoScaleSliderHeight: 450,
+
+                        /* size of all images http://help.dimsemenov.com/kb/royalslider-jquery-plugin-faq/adding-width-and-height-properties-to-images */
+                        imgWidth: 640,
+                        imgHeight: 360
+
+                    });
+                });
+                </script>
+                <div class="caption-full" style="padding-top: 20px">
+                    <h2>{{ lst2.title }}</h2>
                     <hr>
                     <h4><strong>Description</strong></h4>
 
@@ -20,7 +93,9 @@
                     <div class="row">
                         <div class="col-md-1"></div>
                         <div class="col-md-5">
-                            <h5><strong>minimum</strong></h5>
+                            <h3>
+                                <small>minimum</small>
+                            </h3>
                             <hr>
                             <p><strong>OS: </strong></p>
 
@@ -35,7 +110,9 @@
                             <p><strong>Hard Drive: </strong></p>
                         </div>
                         <div class="col-md-5">
-                            <h5><strong>recommend</strong></h5>
+                            <h3>
+                                <small>recommend</small>
+                            </h3>
                             <hr>
                             <p><strong>OS: </strong></p>
 
@@ -54,14 +131,19 @@
                 </div>
             </div>
 
-            <h3>Comments:</h3>
+            <h3>Feedback:</h3>
 
             <div class="well">
                 {% if user.is_authenticated %}
                     <div class="text-right">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal"
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                data-target="#exampleModal"
                                 data-whatever="@mdo">Write a Review
                         </button>
+                    </div>
+                {% else %}
+                    <div class="text-right">
+                        <h4><a href="{% url "user_login" %}">Register/login to write a feedback</a></h4>
                     </div>
                 {% endif %}
                 <hr>
@@ -127,16 +209,19 @@
                     <h4 class="modal-title" id="exampleModalLabel">Write a Review</h4>
                 </div>
                 <form method="POST" class="post-form">
-                <div class="modal-body">
+                    <div class="modal-body">
                         {% csrf_token %}
                         {{ form.as_p }}
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
+
+
+
 {% endblock %}
