@@ -18,10 +18,26 @@ class AddCategoryForm(forms.ModelForm):
         fields = ['name']
 
 class AddGameForm(forms.ModelForm):
-    category_id = forms.ModelMultipleChoiceField(queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple)
+    category_id = forms.ModelMultipleChoiceField(label = "Category", queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple)
+    os_min =        forms.CharField(label='OS Minimum        ')
+    processor_min = forms.CharField(label='Processor Minimum ')
+    memory_min =    forms.CharField(label='Memory Minimum    ')
+    graphics_min =  forms.CharField(label='Graphics Minimum  ')
+    directx_min =   forms.CharField(label='DirectX Minimum   ')
+    harddrive_min = forms.CharField(label='Hard Drive Minimum')
+    os_rec =        forms.CharField(label='OS Recommended        ')
+    processor_rec = forms.CharField(label='Processor Recommended ')
+    memory_rec =    forms.CharField(label='Memory Recommended    ')
+    graphics_rec =  forms.CharField(label='Graphics Recommended  ')
+    directx_rec =   forms.CharField(label='DirectX Recommended   ')
+    harddrive_rec = forms.CharField(label='Hard Drive Recommended')
     class Meta:
         model = Game_info
-        fields = ['title', 'description', 'platform', 'category_id', 'redirectlink', 'youtubelink']
+        fields = [
+            'title', 'description', 'platform', 'category_id', 'redirectlink', 'youtubelink',
+            'os_min', 'processor_min', 'memory_min', 'graphics_min', 'directx_min', 'harddrive_min',
+            'os_rec', 'processor_rec', 'memory_rec', 'graphics_rec', 'directx_rec', 'harddrive_rec'
+        ]
 
 
 class CategoryForm(forms.ModelForm):

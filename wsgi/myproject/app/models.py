@@ -75,6 +75,18 @@ class Game_info(models.Model):
     platform = models.CharField(max_length=50)
     redirectlink = models.CharField(max_length=250, null=True, blank=True)
     youtubelink = models.CharField(max_length=250, null=True, blank=True)
+    os_min = models.CharField(max_length=50, default = "", null=True, blank=True)
+    processor_min = models.CharField(max_length=50, default = "", null=True, blank=True)
+    memory_min = models.CharField(max_length=50, default = "", null=True, blank=True)
+    graphics_min = models.CharField(max_length=50, default = "", null=True, blank=True)
+    directx_min = models.CharField(max_length=50, default = "", null=True, blank=True)
+    harddrive_min = models.CharField(max_length=50, default = "", null=True, blank=True)
+    os_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
+    processor_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
+    memory_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
+    graphics_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
+    directx_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
+    harddrive_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
