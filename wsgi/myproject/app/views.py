@@ -63,13 +63,16 @@ def user_logout(request):
     return redirect('app.views.user_home')
 
 def password_change(request):
-    if request.method == "POST":
-        form = ChangePasswordForm(request.POST)
-        if form.is_valid():
-            post = User.objects.get(password=form.old_password)
-            post.set_password(form.password)
-            post.save()
+    form = ChangePasswordForm(request.POST)
+    if request.method == "POST" and form.is_valid():
+        new_pass = form.cleaned_data['password']
+        confirm_pass = form.cleaned_data['confirm_password']
+        if new_pass == confirm_pass:
+            request.user.set_password(form.cleaned_data['password'])
+            request.user.save()
             return redirect('app.views.user_login')
+        else:
+            return redirect('app.views.password_change')
     else:
         form = ChangePasswordForm()
     return render(request, 'app/changepassword.html', {'form': form})

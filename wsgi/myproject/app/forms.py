@@ -44,16 +44,15 @@ class CategoryForm(forms.ModelForm):
     categorylist = forms.ModelMultipleChoiceField(queryset=Category, to_field_name='category')
 
 class ChangePasswordForm(forms.ModelForm):
-    old_password = forms.CharField(widget=forms.PasswordInput)
+    password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ['old_password', 'password', 'confirm_password']
+        fields = ['password', 'confirm_password']
 
         password = forms.CharField(widget=forms.PasswordInput)
         widgets = {
-            'old_password': forms.PasswordInput(),
             'password': forms.PasswordInput(),
             'confirm_password': forms.PasswordInput(),
         }
