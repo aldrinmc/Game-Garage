@@ -39,6 +39,13 @@ class AddGameForm(forms.ModelForm):
             'os_rec', 'processor_rec', 'memory_rec', 'graphics_rec', 'directx_rec', 'harddrive_rec'
         ]
 
+        redirectlink = forms.CharField(widget=forms.URLInput)
+        youtubelink = forms.CharField(widget=forms.URLInput)
+        widgets = {
+            'redirectlink': forms.URLInput(),
+            'youtubelink': forms.URLInput(),
+        }
+
 
 class CategoryForm(forms.ModelForm):
     categorylist = forms.ModelMultipleChoiceField(queryset=Category, to_field_name='category')
