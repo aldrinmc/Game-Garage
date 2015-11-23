@@ -5,6 +5,10 @@ from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm, FeedbackForm
 from .models import User, Category, Game_info, Game_request, Image, Feedback
+from django.utils.crypto import get_random_string
+from django.core.mail import send_mail
+import random
+import string
 
 #######################USER###############################################################
 #######################USER###############################################################
@@ -206,8 +210,8 @@ def gameinfo(request):
 
 def request_password(request):
     if request.method == 'POST':
-        subject = 'Your password'
-        message = 'my password'
+        subject = 'Your new password'
+        message = ''.join(random.choice(string.ascii_uppercase) for i in range (12))
         from_email = request.POST['email']
         user_email = User.objects.get(email=from_email)
         send_mail(subject, message, 'nparadiang483', [from_email], fail_silently=False)
