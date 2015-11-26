@@ -5,6 +5,8 @@
     <form method="POST" class="post-form" enctype="multipart/form-data">
     	{% csrf_token %}
         {{ form.as_p }}
+        {{ pc.as_p }}
+        {{ mobile.as_p }}
         {{ image.as_p }}
         <button type="submit" value="Upload" class="save btn btn-default">Save</button>
     </form>
