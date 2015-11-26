@@ -4,11 +4,12 @@ from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+
+
 # CUSTOM USER AUTH
 ###############################################################################
 
 class UserManager(BaseUserManager):
-
     def create_user(self, email, password, **kwargs):
         user = self.model(
             email=self.normalize_email(email),
@@ -32,6 +33,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return UserManager
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
 
@@ -44,15 +46,45 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
 
     def get_full_name(self):
-        return self.email
+        return self.first_name + " " + self.last_name
+
     def get_short_name(self):
-        return self.email
+        return self.first_name
 
     objects = UserManager()
 
+
 ###############################################################################
 ###############################################################################
 ###############################################################################
+
+class Platform(models.Model):
+    name = models.CharField(max_length=50)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+class PC_requirement(models.Model):
+    os_min = models.CharField(max_length=50, default="", null=True, blank=True)
+    processor_min = models.CharField(max_length=50, default="", null=True, blank=True)
+    memory_min = models.CharField(max_length=50, default="", null=True, blank=True)
+    graphics_min = models.CharField(max_length=50, default="", null=True, blank=True)
+    directx_min = models.CharField(max_length=50, default="", null=True, blank=True)
+    harddrive_min = models.CharField(max_length=50, default="", null=True, blank=True)
+    os_rec = models.CharField(max_length=50, default="", null=True, blank=True)
+    processor_rec = models.CharField(max_length=50, default="", null=True, blank=True)
+    memory_rec = models.CharField(max_length=50, default="", null=True, blank=True)
+    graphics_rec = models.CharField(max_length=50, default="", null=True, blank=True)
+    directx_rec = models.CharField(max_length=50, default="", null=True, blank=True)
+    harddrive_rec = models.CharField(max_length=50, default="", null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+
+class Mobile_requirement(models.Model):
+    compatible = models.CharField(max_length=50, default="", null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
 
 class Category(models.Model):
     name = models.CharField(max_length=50)
@@ -60,8 +92,10 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
     class Meta:
         ordering = ['name']
+
 
 def generate_filename(instance, filename):
     ext = filename.split('.')[-1]
@@ -72,25 +106,16 @@ class Game_info(models.Model):
     title = models.CharField(max_length=30, unique=True)
     description = models.TextField(max_length=3000)
     category_id = models.ManyToManyField(Category)
-    platform = models.CharField(max_length=50)
+    platform = models.ManyToManyField(Platform, null=True, blank=True)
     redirectlink = models.CharField(max_length=250, null=True, blank=True)
     youtubelink = models.CharField(max_length=250, null=True, blank=True)
-    os_min = models.CharField(max_length=50, default = "", null=True, blank=True)
-    processor_min = models.CharField(max_length=50, default = "", null=True, blank=True)
-    memory_min = models.CharField(max_length=50, default = "", null=True, blank=True)
-    graphics_min = models.CharField(max_length=50, default = "", null=True, blank=True)
-    directx_min = models.CharField(max_length=50, default = "", null=True, blank=True)
-    harddrive_min = models.CharField(max_length=50, default = "", null=True, blank=True)
-    os_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
-    processor_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
-    memory_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
-    graphics_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
-    directx_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
-    harddrive_rec = models.CharField(max_length=50, default = "", null=True, blank=True)
+    pc_req = models.OneToOneField(PC_requirement, null=True, blank=True)
+    mobile_req = models.OneToOneField(Mobile_requirement, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
+
 
 class Image(models.Model):
     thumbnail = models.ImageField(upload_to=generate_filename)
@@ -101,23 +126,25 @@ class Image(models.Model):
     game_id = models.ForeignKey(Game_info, null=True, blank=True)
 
 
-
 class Feedback(models.Model):
     comment = models.TextField(max_length=300)
-    created_date = models.DateTimeField(default=timezone.now(),blank=True, null=True)
+    created_date = models.DateTimeField(default=timezone.now(), blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     rating = models.IntegerField()
     user = models.ForeignKey(User)
     game = models.ForeignKey(Game_info, default=1)
     is_active = models.BooleanField(default=True)
 
+
 class Game_request(models.Model):
     title = models.CharField(max_length=30)
-    created_date = models.DateTimeField(default=timezone.now(),blank=True, null=True)
+    created_date = models.DateTimeField(default=timezone.now(), blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(User, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def publish(self):
-        self.published_date=timezone.now()
+        self.published_date = timezone.now()
         self.save()
+
+
