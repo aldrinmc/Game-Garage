@@ -3,8 +3,8 @@ from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm, FeedbackForm
-from .models import User, Category, Game_info, Game_request, Image, Feedback
+from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm, FeedbackForm, Mobile_reqForm, PlatForm, Pc_ReqForm
+from .models import User, Category, Game_info, Game_request, Image, Feedback,Platform
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 import random
@@ -52,7 +52,7 @@ def user_login(request):
             if user is not None and user.is_active:
                 login(request, user)
                 return redirect('app.views.user_home')
-             else:
+            else:
                 log_fail = True
                 return render(request, 'app/login.html', {'log_fail':log_fail})
 
