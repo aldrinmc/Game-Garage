@@ -76,7 +76,8 @@ def password_change(request):
             request.user.save()
             return redirect('app.views.user_login')
         else:
-            return redirect('app.views.password_change')
+            pass_fail = True
+            return render(request, 'app/changepassword.html', {'pass_fail':pass_fail})
     else:
         form = ChangePasswordForm()
     return render(request, 'app/changepassword.html', {'form': form})
