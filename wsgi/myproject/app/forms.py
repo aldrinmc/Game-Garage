@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Game_info, Game_request, Image, User, Feedback
+from .models import Category, Game_info, Game_request, Image, User, Feedback, Platform, PC_requirement, Mobile_requirement
 from django.forms import ModelForm
 
 class UserForm(forms.ModelForm):
@@ -18,25 +18,13 @@ class AddCategoryForm(forms.ModelForm):
         fields = ['name']
 
 class AddGameForm(forms.ModelForm):
-    category_id = forms.ModelMultipleChoiceField(label = "Category", queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple)
-    os_min =        forms.CharField(label='OS Minimum        ')
-    processor_min = forms.CharField(label='Processor Minimum ')
-    memory_min =    forms.CharField(label='Memory Minimum    ')
-    graphics_min =  forms.CharField(label='Graphics Minimum  ')
-    directx_min =   forms.CharField(label='DirectX Minimum   ')
-    harddrive_min = forms.CharField(label='Hard Drive Minimum')
-    os_rec =        forms.CharField(label='OS Recommended        ')
-    processor_rec = forms.CharField(label='Processor Recommended ')
-    memory_rec =    forms.CharField(label='Memory Recommended    ')
-    graphics_rec =  forms.CharField(label='Graphics Recommended  ')
-    directx_rec =   forms.CharField(label='DirectX Recommended   ')
-    harddrive_rec = forms.CharField(label='Hard Drive Recommended')
+    category_id = forms.ModelMultipleChoiceField(label = "Category", queryset=Category.objects.filter(is_active=True).order_by('name').all(), widget=forms.CheckboxSelectMultiple)
+    platform = forms.ModelMultipleChoiceField(label = "Platform", queryset=Platform.objects.filter(is_active=True).order_by('name').all(), widget=forms.CheckboxSelectMultiple)
+
     class Meta:
         model = Game_info
         fields = [
-            'title', 'description', 'platform', 'category_id', 'redirectlink', 'youtubelink',
-            'os_min', 'processor_min', 'memory_min', 'graphics_min', 'directx_min', 'harddrive_min',
-            'os_rec', 'processor_rec', 'memory_rec', 'graphics_rec', 'directx_rec', 'harddrive_rec'
+            'title', 'description', 'platform', 'category_id', 'redirectlink', 'youtubelink'
         ]
 
         redirectlink = forms.CharField(widget=forms.URLInput)
@@ -48,7 +36,7 @@ class AddGameForm(forms.ModelForm):
 
 
 class CategoryForm(forms.ModelForm):
-    categorylist = forms.ModelMultipleChoiceField(queryset=Category, to_field_name='category')
+    categorylist = forms.ModelMultipleChoiceField(queryset=Category.objects.filter(is_active=True).all(), to_field_name='category')
 
 class ChangePasswordForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -79,3 +67,18 @@ class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
         fields = ['comment', 'rating' ]
+
+class PlatForm(forms.ModelForm):
+    class Meta:
+        model = Platform
+        fields = ['name']
+
+class Pc_ReqForm(forms.ModelForm):
+    class Meta:
+        model = PC_requirement
+        fields = ['os_min', 'processor_min', 'memory_min', 'graphics_min', 'directx_min', 'harddrive_min', 'os_rec', 'processor_rec', 'memory_rec', 'graphics_rec', 'directx_rec', 'harddrive_rec']
+
+class Mobile_reqForm(forms.ModelForm):
+    class Meta:
+        model = Mobile_requirement
+        fields = ['compatible']
