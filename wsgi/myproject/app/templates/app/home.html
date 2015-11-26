@@ -9,31 +9,33 @@
     <div class="panel">
         <div class="panel-body">
             {% for list in games %}
-                <div class="row" style="padding-left: 40px">
-                    <br>
-                    {% for i in image %}
-                        {% if i.game_id.pk == list.pk %}
-                            <div class="col-md-2 col-sm-3 text-center">
-                                <a class="story-img" href="#"><img src="/static/images/{{ i.thumbnail }}" style="width:200px;height:150px" class="img-rounded"></a>
+                {% if list.is_active == True %}
+                    <div class="row" style="padding-left: 40px">
+                        <br>
+                        {% for i in image %}
+                            {% if i.game_id.pk == list.pk %}
+                                <div class="col-md-2 col-sm-3 text-center">
+                                    <a class="story-img" href="#"><img src="/static/images/{{ i.thumbnail }}" style="width:200px;height:150px" class="img-rounded"></a>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="col-md-10 col-sm-9">
+                            <div class="row">
+                                <div>
+                                    <h3><a href="{% url "gamepage" pk=list.pk %}">{{ list.title }}    <small>( {{ list.platform }} )</small></a></h3>
+                                </div>
                             </div>
-                        {% endif %}
-                    {% endfor %}
-                    <div class="col-md-10 col-sm-9">
-                        <div class="row">
-                            <div>
-                                <h3><a href="{% url "gamepage" pk=list.pk %}">{{ list.title }}    <small>( {{ list.platform }} )</small></a></h3>
+                            <div class="row">
+                                <div class="col-xs-9">
+                                    <p>{{ list.description }}</p>
+                                </div>
+                                <div class="col-xs-3"></div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-9">
-                                <p>{{ list.description }}</p>
-                            </div>
-                            <div class="col-xs-3"></div>
                         </div>
                     </div>
-                </div>
-                <hr>
-                </div>
-                </div>
+                    <hr>
+                    </div>
+                    </div>
+                {% endif %}
             {% endfor %}
 {% endblock %}
