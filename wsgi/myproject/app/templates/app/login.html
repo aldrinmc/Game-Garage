@@ -9,6 +9,10 @@
     <div class="panel-heading">
     <h3 class="panel-title">Log in</h3>
     </div>
+        {% if log_fail == True %}
+          <br>
+          <div class="alert alert-warning">Incorrect Email or Password</div>
+        {% endif %}
           <div class="panel-body">
             <form method="POST" accept-charset="UTF-8" role="form">
             {% csrf_token %}
