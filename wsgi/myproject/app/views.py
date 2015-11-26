@@ -121,10 +121,16 @@ def user_admin(request):
 def add_game(request):
     if request.method == "POST":
         form = AddGameForm(request.POST)
+        pc = Pc_ReqForm(request.POST)
+        mobile = Mobile_reqForm(request.POST)
         image_form = ImageForm(request.POST, request.FILES)
         if form.is_valid() and image_form.is_valid():
             model = form.save(commit=False)
+            preq = pc.save()
+            mreq = mobile.save()
             image = image_form.save(commit=False)
+            model.pc_req = preq
+            model.mobile_req = mreq
             model.save()
             image.save()
             form.save_m2m()
@@ -135,7 +141,9 @@ def add_game(request):
     else:
         form = AddGameForm()
         image_form = ImageForm()
-    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form})
+        pc = Pc_ReqForm()
+        mobile = Mobile_reqForm()
+    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form, 'pc': pc, 'mobile': mobile})
 
 @login_required
 def view_games(request):
@@ -278,3 +286,22 @@ def delete_request(request, pk):
     lists.save()
     return redirect('app.views.viewreq')
 
+@login_required
+def platform(request):
+    if request.method == "POST" and request.user.is_admin:
+        form = PlatForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.save()
+            return redirect('app.views.platform')
+    else:
+        form = PlatForm()
+        lists = Platform.objects.order_by('name').all()
+    return render(request, 'app/admin/platform.html', {'form': form, 'lists': lists})
+
+@login_required
+def delete_platform(request, pk):
+    lists = Platform.objects.get(pk=pk)
+    lists.is_active = False
+    lists.save()
+    return redirect('app.views.platform')
