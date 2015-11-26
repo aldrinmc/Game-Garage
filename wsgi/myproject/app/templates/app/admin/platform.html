@@ -1,0 +1,26 @@
+{% extends "app/admin/base.html" %}
+
+{% block content %}
+    <form method="POST" class="post-form">{% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Add</button>
+    </form>
+    <br>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Platform</th>
+        </tr>
+        </thead>
+        <tbody>
+            {% for list in lists %}
+                {% if list.is_active == True %}
+                    <tr>
+                        <td>{{ list.name }}</td>
+                        <td><a href="{% url "delete_platform" pk=list.pk %}">Delete</a></td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
