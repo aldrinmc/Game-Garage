@@ -223,14 +223,22 @@ def gameinfo(request):
 def request_password(request):
     if request.method == 'POST':
         subject = 'Your new password'
-        message = ''.join(random.choice(string.ascii_uppercase) for i in range (12))
+        message = ''.join(random.choice(string.ascii_uppercase) for i in range (6))
         from_email = request.POST['email']
-        user_email = User.objects.get(email=from_email)
-        send_mail(subject, message, 'nparadiang483', [from_email], fail_silently=False)
-       
-        return redirect('app.views.user_login')
+        try:
+            user_email = User.objects.get(email=from_email)
+            send_mail(subject, message, 'nparadiang483', [from_email], fail_silently=False)
+            user_email.set_password(message)
+            user_email.save()
+            send_success = True
+            return redirect('app.views.user_login')
+        except User.DoesNotExist:
+            send_success = False
+            return render(request, 'app/recover_password.html', {'send_success':send_success})
+        
 
     return render(request, 'app/recover_password.html')
+
 
 ################################################################
 
