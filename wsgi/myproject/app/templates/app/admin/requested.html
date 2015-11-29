@@ -12,7 +12,7 @@
                 {% if list.is_active == True %}
                     <tr>
                         <td>{{ list.title }}</td>
-                        <td><a href="{% url "add_game" %}">Add Game</a></td>
+                        <td><a href="{% url "add_requested" pk=list.pk %}">Add Game</a></td>
                         <td><a href="{% url "delete_req" pk=list.pk %}">Delete</a></td>
                     </tr>
                 {% endif %}

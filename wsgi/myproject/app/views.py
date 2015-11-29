@@ -170,8 +170,21 @@ def update_game(request, pk):
     else:
         form = AddGameForm(instance=post)
         image_form = ImageForm(instance=post_image)
-    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form})    
+    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form})  
 
+@login_required
+def add_requested(request, pk):
+    post = get_object_or_404(Game_request, pk=pk)
+    if request.method == 'POST':
+        form = AddGameForm(request.POST, instance=post)
+        if form.is_valid():
+            model = form.save(commit=False)
+            model.save()
+            form.save_m2m()
+    else:
+        form = AddGameForm(instance=post)
+    return render(request, 'app/admin/add_game.html', {'form': form})
+  
 @login_required
 def delete_game(request, pk):
     lists = Game_info.objects.get(pk=pk)
