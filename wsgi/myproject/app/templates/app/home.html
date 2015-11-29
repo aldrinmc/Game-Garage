@@ -8,39 +8,62 @@
     <div class="banner"></div>
     <div class="panel">
         <div class="panel-body">
-            {% for list in games %}
-                {% if list.is_active == True %}
-                    <div class="row" style="padding-left: 20px">
-                        <br>
-                        {% for i in image %}
+            <div class="row">
+                {% for list in games %}
+                    {% if list.is_active == True and forloop.counter|divisibleby:2 %}
+                        <div class="col-md-7">
+                            </a> {% for i in image %}
                             {% if i.game_id.pk == list.pk %}
-                                <div class="col-md-2 col-sm-3 text-center">
-                                    <a class="story-img" href="#"><img src="/static/images/{{ i.thumbnail }}"
-                                                                       style="width:200px;height:150px"
-                                                                       class="img-rounded"></a>
-                                </div>
+                                <a href="#">
+                                    <img class="img-responsive" src="/static/images/{{ i.thumbnail }}" alt="">
+                                </a>
                             {% endif %}
                         {% endfor %}
-                        <div class="col-md-10 col-sm-9">
-                            <div class="row">
-                                <div>
-                                    <h3><a href="{% url "gamepage" pk=list.pk %}">{{ list.title }}
-                                        <small>( Windows )</small>
-                                    </a></h3>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-9">
-                                    <p>{{ list.description }}</p>
-                                </div>
-                                <div class="col-xs-3"></div>
-                            </div>
                         </div>
-                    </div>
-                    <hr>
-                {% endif %}
-            {% endfor %}
-        </div>
+
+                        <div class="col-md-5">
+                            <h3>{{ list.title }}</h3>
+                            <h4>
+                                <small>{{ list.platform }}</small>
+                            </h4>
+
+                            <p>{{ list.description|slice:":250" }}...</p>
+                            <a class="btn btn-primary" href="{% url "gamepage" pk=list.pk %}">View Game <span
+                                    class="glyphicon glyphicon-chevron-right"></span></a>
+                        </div>
+                        </div>
+                        <!-- /.row -->
+
+                        <hr>
+                    {% elif list.is_active == True %}
+                        <div class="col-md-5">
+                            <h3>{{ list.title }}</h3>
+                            <h4>
+                                <small>{{ list.platform }}</small>
+                            </h4>
+
+                            <p>{{ list.description|slice:":250" }}...</p>
+                            <a class="btn btn-primary" href="{% url "gamepage" pk=list.pk %}">View Game <span
+                                    class="glyphicon glyphicon-chevron-right"></span></a>
+                        </div>
+
+                        <div class="col-md-7">
+                            </a> {% for i in image %}
+                            {% if i.game_id.pk == list.pk %}
+                                <a href="#">
+                                    <img class="img-responsive" src="/static/images/{{ i.thumbnail }}" alt="">
+                                </a>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                        </div>
+                        <!-- /.row -->
+
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+    </div>
+    </div>
     </div>
 
 {% endblock %}
