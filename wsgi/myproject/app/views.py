@@ -137,6 +137,7 @@ def add_game(request):
             game_id = Game_info.objects.get(id=model.pk)
             image.game_id = game_id
             image.save()
+            return redirect('app.views.view_games')
 
     else:
         form = AddGameForm()
