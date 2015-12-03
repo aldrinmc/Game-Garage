@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import AnonymousUser
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, render_to_response
+from django.template import RequestContext
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm, FeedbackForm, PlatForm, System_ReqForm
@@ -340,3 +341,15 @@ def delete_platform(request, pk):
 def about_us(request):
     lst = Category.objects.all()
     return render(request, 'app/about.html', {'lst':lst})
+
+def searchgame_name(request):
+    if request.method == "GET":
+        search_name = request.GET.get('game_name')
+        gamename = Game_info.objects.filter(title=search_name)
+        lst = Category.objects.order_by('name').all()
+        #return render(request, 'app/searchgame_page.html', {'game_name': gamename, 'lst': lst})
+        return render_to_response('app/searchgame_page.html',{'lst':lst,'gamename':gamename}, context_instance=RequestContext(request))
+    else:
+        gamename = Game_info.objects.all()
+        lst = Category.objects.order_by('name').all()
+        return render(request,'app/search_page.html', {'gamename':gamename,'lists':lst})
