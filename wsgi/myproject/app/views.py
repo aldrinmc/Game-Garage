@@ -3,7 +3,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm, FeedbackForm, Mobile_reqForm, PlatForm, Pc_ReqForm
+from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm, FeedbackForm, PlatForm, System_ReqForm
 from .models import User, Category, Game_info, Game_request, Image, Feedback,Platform
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
@@ -121,16 +121,13 @@ def user_admin(request):
 def add_game(request):
     if request.method == "POST":
         form = AddGameForm(request.POST)
-        pc = Pc_ReqForm(request.POST)
-        mobile = Mobile_reqForm(request.POST)
+        sys = System_ReqForm(request.POST)
         image_form = ImageForm(request.POST, request.FILES)
         if form.is_valid() and image_form.is_valid():
             model = form.save(commit=False)
-            preq = pc.save()
-            mreq = mobile.save()
+            preq = sys.save()
             image = image_form.save(commit=False)
-            model.pc_req = preq
-            model.mobile_req = mreq
+            model.System_req = preq
             model.save()
             image.save()
             form.save_m2m()
@@ -142,9 +139,8 @@ def add_game(request):
     else:
         form = AddGameForm()
         image_form = ImageForm()
-        pc = Pc_ReqForm()
-        mobile = Mobile_reqForm()
-    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form, 'pc': pc, 'mobile': mobile})
+        sys = System_ReqForm()
+    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form, 'sys': sys})
 
 @login_required
 def view_games(request):
