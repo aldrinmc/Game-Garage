@@ -128,14 +128,14 @@ if ON_OPENSHIFT:
     }
 else:
     DATABASES = {
-	    'default': {
-	        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-	        'NAME': 'gamerdb',
-	        'USER': 'user',
-	        'PASSWORD': 'asdasd',
-	        'HOST': 'localhost',
-	       'PORT': '5432',
-	    }
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'game7',
+            'USER': 'gamers7',
+            'PASSWORD': 'asdasd',
+            'HOST': 'localhost',
+            'PORT': '',
+        }
     }
 
 # Internationalization
