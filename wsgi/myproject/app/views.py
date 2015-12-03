@@ -336,3 +336,7 @@ def delete_platform(request, pk):
     lists.is_active = False
     lists.save()
     return redirect('app.views.platform')
+
+def about_us(request):
+    lst = Category.objects.all()
+    return render(request, 'app/about.html', {'lst':lst})
