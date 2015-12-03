@@ -15,7 +15,7 @@ import string
 #######################USER###############################################################
 #######################USER###############################################################
 def user_add(request):
-    lst = Category.objects.all()
+    lst = Category.objects.filter(is_active = True).all()
     try:
         if request.method == 'POST':
 
@@ -43,7 +43,7 @@ def user_add(request):
 
 
 def user_login(request):
-    lst = Category.objects.all()
+    lst = Category.objects.filter(is_active = True).all()
     if request.method == 'POST':
 
         try:
@@ -90,7 +90,7 @@ def password_change(request):
 # the user is either admin or not admin
 # different view for admin and not admin
 def user_home(request):
-    lst = Category.objects.all()
+    lst = Category.objects.filter(is_active = True).all()
     if request.user.is_authenticated():
         user = User.objects.get(pk=request.user.id)
         games = Game_info.objects.all()
@@ -136,6 +136,11 @@ def add_game(request):
             image.game_id = game_id
             image.save()
             return redirect('app.views.view_games')
+        elif form.is_valid() == False :
+            gamelist = Game_info.objects.all()
+            for i in gamelist:
+                if i.title == request.POST['title']:
+                    return redirect('app.views.update_game', i.id)
 
     else:
         form = AddGameForm()
@@ -145,7 +150,7 @@ def add_game(request):
 
 @login_required
 def view_games(request):
-    lists=Game_info.objects.all()
+    lists=Game_info.objects.filter(is_active = True).all()
     return render(request, 'app/admin/view_games.html', {'lists': lists})
 
 @login_required
@@ -159,13 +164,14 @@ def update_game(request, pk):
         if form.is_valid() and image_form.is_valid():
             model = form.save(commit=False)
             image = image_form.save(commit=False)
+            model.is_active = True
             model.save()
             image.save()
             form.save_m2m()
             game_id = Game_info.objects.get(id=model.pk)
             image.game_id = game_id
             image.save()
-
+            return redirect('app.views.view_games')
     else:
         form = AddGameForm(instance=post)
         image_form = ImageForm(instance=post_image)
@@ -231,7 +237,7 @@ def delete_category(request, pk):
     return redirect('app.views.category')
 
 def gameinfo(request):
-    lst = Category.objects.all()
+    lst = Category.objects.filter(is_active = True).all()
     if request.method == "POST":
         form = AddGameForm(request.POST)
         if form.is_valid():
@@ -267,15 +273,15 @@ def request_password(request):
 ################################################################
 
 def category_list(request, pk):
-    lst = Category.objects.order_by('name').all()
-    tlst2 = Game_info.objects.filter(category_id=pk).all()
+    lst = Category.objects.filter(is_active = True).order_by('name').all()
+    tlst2 = Game_info.objects.filter(category_id=pk).filter(is_active = True).all()
     lst2 = []
     name = Category.objects.get(pk=pk)
     return render(request, 'app/category_list.html', {'lst':lst,'lst2':tlst2, 'name':name})
 
 def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
-    lst = Category.objects.all()
+    lst = Category.objects.filter(is_active = True).all()
     lst3 = Feedback.objects.filter(game=pk).all()
     image = Image.objects.get(game_id=lst2)
     if request.user.is_authenticated():
@@ -299,7 +305,7 @@ def viewreq(request):
 
 @login_required
 def requestgame(request, template_name='app/request.html'):
-    lst = Category.objects.all()
+    lst = Category.objects.filter(is_active = True).all()
     form2 = Form()
     if request.method == "POST":
         form = Form(request.POST)
@@ -339,7 +345,7 @@ def delete_platform(request, pk):
     return redirect('app.views.platform')
 
 def about_us(request):
-    lst = Category.objects.all()
+    lst = Category.objects.filter(is_active = True).all()
     return render(request, 'app/about.html', {'lst':lst})
 
 def searchgame_name(request):
@@ -350,6 +356,6 @@ def searchgame_name(request):
         #return render(request, 'app/searchgame_page.html', {'game_name': gamename, 'lst': lst})
         return render_to_response('app/searchgame_page.html',{'lst':lst,'gamename':gamename}, context_instance=RequestContext(request))
     else:
-        gamename = Game_info.objects.all()
+        gamename = Game_info.objects.filter(is_active = True).all()
         lst = Category.objects.order_by('name').all()
         return render(request,'app/search_page.html', {'gamename':gamename,'lists':lst})
