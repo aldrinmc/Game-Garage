@@ -153,6 +153,7 @@ def update_game(request, pk):
     post_image = get_object_or_404(Image, game_id=pk)
     if request.method == "POST":
         form = AddGameForm(request.POST, instance=post)
+        sys = System_ReqForm(request.POST)
         image_form = ImageForm(request.POST, request.FILES, instance=post_image)
         if form.is_valid() and image_form.is_valid():
             model = form.save(commit=False)
@@ -174,13 +175,25 @@ def add_requested(request, pk):
     post = get_object_or_404(Game_request, pk=pk)
     if request.method == 'POST':
         form = AddGameForm(request.POST, instance=post)
+        sys = System_ReqForm(request.POST)
+        image_form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             model = form.save(commit=False)
+            preq = sys.save()
+            image = image_form.save(commit=False)
+            model.System_req = preq
             model.save()
+            image.save()
             form.save_m2m()
+            game_id = Game_info.objects.get(id=model.pk)
+            image.game_id = game_id
+            image.save()
+            return redirect('app.views.view_games')
     else:
         form = AddGameForm(instance=post)
-    return render(request, 'app/admin/add_game.html', {'form': form})
+        sys = System_ReqForm(request.POST)
+        image_form = ImageForm(request.POST, request.FILES)
+    return render(request, 'app/admin/add_game.html', {'form': form, 'sys':sys, 'image': image_form})
   
 @login_required
 def delete_game(request, pk):
