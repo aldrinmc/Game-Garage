@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'adminpanel/update_game/(?P<pk>[0-9]+)/$', views.update_game, name='update_game'),
     url(r'adminpanel/add_requested/(?P<pk>[0-9]+)/$', views.add_requested, name='add_requested'),
     url(r'^(?P<pk>[0-9]+)/adminpanel/delete_game/$', views.delete_game, name='delete_game'),
+    url(r'about/$', views.about_us, name='about'),
     url(r'adminpanel/delete_category/(?P<pk>[0-9]+)/$', views.delete_category, name='delete_category'),
     url(r'adminpanel/delete_platform/(?P<pk>[0-9]+)/$', views.delete_platform, name='delete_platform'),
     url(r'^gameinfo', views.gameinfo, name='gameinfo'),
