@@ -65,24 +65,16 @@ class Platform(models.Model):
     def __str__(self):
         return self.name
 
-class PC_requirement(models.Model):
-    os_min = models.CharField(max_length=50, default="", null=True, blank=True)
+class System_requirement(models.Model):
     processor_min = models.CharField(max_length=50, default="", null=True, blank=True)
     memory_min = models.CharField(max_length=50, default="", null=True, blank=True)
     graphics_min = models.CharField(max_length=50, default="", null=True, blank=True)
-    directx_min = models.CharField(max_length=50, default="", null=True, blank=True)
-    harddrive_min = models.CharField(max_length=50, default="", null=True, blank=True)
-    os_rec = models.CharField(max_length=50, default="", null=True, blank=True)
+    storage_min = models.CharField(max_length=50, default="", null=True, blank=True)
     processor_rec = models.CharField(max_length=50, default="", null=True, blank=True)
     memory_rec = models.CharField(max_length=50, default="", null=True, blank=True)
     graphics_rec = models.CharField(max_length=50, default="", null=True, blank=True)
-    directx_rec = models.CharField(max_length=50, default="", null=True, blank=True)
-    harddrive_rec = models.CharField(max_length=50, default="", null=True, blank=True)
-    is_active = models.BooleanField(default=True)
-
-
-class Mobile_requirement(models.Model):
-    compatible = models.CharField(max_length=50, default="", null=True, blank=True)
+    storage_rec = models.CharField(max_length=50, default="", null=True, blank=True)
+    compatible = models.CharField(max_length=200, default="", null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
 
@@ -109,8 +101,7 @@ class Game_info(models.Model):
     platform = models.ManyToManyField(Platform, null=True, blank=True)
     redirectlink = models.CharField(max_length=250, null=True, blank=True)
     youtubelink = models.CharField(max_length=250, null=True, blank=True)
-    pc_req = models.OneToOneField(PC_requirement, null=True, blank=True)
-    mobile_req = models.OneToOneField(Mobile_requirement, null=True, blank=True)
+    sys_req = models.OneToOneField(System_requirement, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
