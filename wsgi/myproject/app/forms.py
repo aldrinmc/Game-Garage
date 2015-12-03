@@ -1,5 +1,5 @@
 from django import forms
-from .models import Category, Game_info, Game_request, Image, User, Feedback, Platform, PC_requirement, Mobile_requirement
+from .models import Category, Game_info, Game_request, Image, User, Feedback, Platform, System_requirement
 from django.forms import ModelForm
 
 class UserForm(forms.ModelForm):
@@ -73,27 +73,19 @@ class PlatForm(forms.ModelForm):
         model = Platform
         fields = ['name']
 
-class Pc_ReqForm(forms.ModelForm):
-    os_min =        forms.CharField(label='OS Minimum        ')
+class System_ReqForm(forms.ModelForm):
     processor_min = forms.CharField(label='Processor Minimum ')
     memory_min =    forms.CharField(label='Memory Minimum    ')
     graphics_min =  forms.CharField(label='Graphics Minimum  ')
-    directx_min =   forms.CharField(label='DirectX Minimum   ')
-    harddrive_min = forms.CharField(label='Hard Drive Minimum')
-    os_rec =        forms.CharField(label='OS Recommended        ')
+    storage_min = forms.CharField(label='Storage Minimum')
     processor_rec = forms.CharField(label='Processor Recommended ')
     memory_rec =    forms.CharField(label='Memory Recommended    ')
     graphics_rec =  forms.CharField(label='Graphics Recommended  ')
-    directx_rec =   forms.CharField(label='DirectX Recommended   ')
-    harddrive_rec = forms.CharField(label='Hard Drive Recommended')
+    storage_rec = forms.CharField(label='Storage Recommended')
+    compatible = forms.CharField(label='Compatibility')
     class Meta:
-        model = PC_requirement
-        fields = ['os_min', 'processor_min', 'memory_min', 'graphics_min', 'directx_min', 
-            'harddrive_min', 'os_rec', 'processor_rec', 'memory_rec', 'graphics_rec',  
-            'directx_rec', 'harddrive_rec'
+        model = System_requirement
+        fields = ['processor_min', 'memory_min', 'graphics_min', 
+            'storage_min', 'processor_rec', 'memory_rec', 'graphics_rec',  
+            'storage_rec', 'compatible'
         ]
-
-class Mobile_reqForm(forms.ModelForm):
-    class Meta:
-        model = Mobile_requirement
-        fields = ['compatible']
