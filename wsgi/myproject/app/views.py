@@ -24,14 +24,13 @@ def user_add(request):
             contact_number = request.POST['contact_number']
             email = request.POST['email']
             password = request.POST['password']
-
             user = User.objects.create_user(email=email, password=password)
             user.first_name = fname
             user.last_name = lname
             user.contact_number = contact_number
             signup_success = True
             user.save()
-            return redirect('app.views.user_login')
+            return render(request, 'app/signup.html', {'signup_success':signup_success})
 
         else:
             form = UserForm()
