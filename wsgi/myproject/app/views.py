@@ -358,3 +358,7 @@ def searchgame_name(request):
         gamename = Game_info.objects.filter(is_active = True).all()
         lst = Category.objects.order_by('name').all()
         return render(request,'app/search_page.html', {'gamename':gamename,'lists':lst})
+
+def succ_pass(request):
+    lst = Category.objects.filter(is_active = True).all()
+    return render(request, 'app/changepass_succ.html', {'lst':lst})
