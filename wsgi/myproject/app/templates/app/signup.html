@@ -10,6 +10,10 @@
                     </div>
                     <div class="panel-body">
                         <form method="POST" accept-charset="UTF-8" role="form" id="myform">
+                        {% if signup_success == True %}
+                            <br>
+                            <div class="alert alert-success"><strong>Successfully Signed up.</strong><a href="{% url "app.views.user_login" %}">  Click here to Login</a></div>
+                        {% endif %}
                             {% csrf_token %}
                             <fieldset>
                                 <div class="form-group">
