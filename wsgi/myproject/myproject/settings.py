@@ -158,7 +158,7 @@ STATIC_URL = '/static/'
 if ON_OPENSHIFT:
 	STATIC_ROOT = os.environ['OPENSHIFT_REPO_DIR'] + 'wsgi/static/' 
 else:
-	STATIC_ROOT = os.path.join(BASE_DIR, 'wsgi/static/')
+	STATIC_ROOT = os.path.join(WSGI_DIR, 'static')
 
 
 AUTH_USER_MODEL = "app.User"
