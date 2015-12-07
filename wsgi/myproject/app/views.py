@@ -180,7 +180,7 @@ def update_game(request, pk):
 def add_requested(request, pk):
     post = get_object_or_404(Game_request, pk=pk)
     if request.method == 'POST':
-        form = AddGameForm(request.POST, instance=post)
+        form = AddGameForm(request.POST)
         sys = System_ReqForm(request.POST)
         image_form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
@@ -194,11 +194,13 @@ def add_requested(request, pk):
             game_id = Game_info.objects.get(id=model.pk)
             image.game_id = game_id
             image.save()
+            post.is_active = False
+            post.save()
             return redirect('app.views.view_games')
     else:
         form = AddGameForm(instance=post)
-        sys = System_ReqForm(request.POST)
-        image_form = ImageForm(request.POST, request.FILES)
+        sys = System_ReqForm()
+        image_form = ImageForm()
     return render(request, 'app/admin/add_game.html', {'form': form, 'sys':sys, 'image': image_form})
   
 @login_required
@@ -274,9 +276,9 @@ def request_password(request):
 def category_list(request, pk):
     lst = Category.objects.filter(is_active = True).order_by('name').all()
     tlst2 = Game_info.objects.filter(category_id=pk).filter(is_active = True).all()
-    lst2 = []
+    image = Image.objects.all()
     name = Category.objects.get(pk=pk)
-    return render(request, 'app/category_list.html', {'lst':lst,'lst2':tlst2, 'name':name})
+    return render(request, 'app/category_list.html', {'lst': lst,'lst2': tlst2, 'name': name, 'image', image})
 
 def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
