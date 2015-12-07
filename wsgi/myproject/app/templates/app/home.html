@@ -8,21 +8,22 @@
     <div class="banner"></div>
     <div class="panel">
         <div class="panel-body">
-            <div class="row">
                 {% for list in games %}
                     {% if list.is_active == True and forloop.counter|divisibleby:2 %}
+                        <div class="row">
                         <div class="col-md-7">
-                            </a> {% for i in image %}
-                            {% if i.game_id.pk == list.pk %}
-                                <a href="#">
-                                    <img class="img-responsive" src="/static/images/{{ i.thumbnail }}" alt="">
-                                </a>
-                            {% endif %}
-                        {% endfor %}
+                            {% for i in image %}
+                                {% if i.game_id.pk == list.pk %}
+                                    <a href="#">
+                                        <img class="img-responsive" src="/static/images/{{ i.thumbnail }}"
+                                             alt="">
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
                         </div>
 
                         <div class="col-md-5">
-                            <h3>{{ list.title }}</h3>
+                            <h1>{{ list.title }}</h1>
                             <h4>
                                 <small>{{ list.platform }}</small>
                             </h4>
@@ -35,9 +36,10 @@
                         <!-- /.row -->
 
                         <hr>
-                    {% elif list.is_active == True %}
+                    {% elif list.is_active == True and not forloop.counter|divisibleby:2 %}
+                        <div class="row">
                         <div class="col-md-5">
-                            <h3>{{ list.title }}</h3>
+                            <h1>{{ list.title }}</h1>
                             <h4>
                                 <small>{{ list.platform }}</small>
                             </h4>
@@ -51,7 +53,8 @@
                             </a> {% for i in image %}
                             {% if i.game_id.pk == list.pk %}
                                 <a href="#">
-                                    <img class="img-responsive" src="/static/images/{{ i.thumbnail }}" alt="">
+                                    <img class="img-responsive" src="/static/images/{{ i.thumbnail }}"
+                                         alt="">
                                 </a>
                             {% endif %}
                         {% endfor %}
