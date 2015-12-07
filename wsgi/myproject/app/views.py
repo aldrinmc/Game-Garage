@@ -352,12 +352,13 @@ def about_us(request):
 def searchgame_name(request):
     if request.method == "GET":
         search_name = request.GET.get('game_name')
-        gamename = Game_info.objects.filter(title=search_name)
+        gamename = Game_info.objects.filter(title__istartswith=search_name)
+        allgame = Game_info.objects.all()
         lst = Category.objects.order_by('name').all()
-        #return render(request, 'app/searchgame_page.html', {'game_name': gamename, 'lst': lst})
-        return render_to_response('app/searchgame_page.html',{'lst':lst,'gamename':gamename}, context_instance=RequestContext(request))
+        #return render(request, 'app/searchgame_page.html', {'gamename': gamename, 'lst': lst, 'search_name': search_name, 'allgame': allgame})
+        return render_to_response('app/searchgame_page.html', {'gamename': gamename, 'lst': lst, 'search_name': search_name})
     else:
-        gamename = Game_info.objects.filter(is_active = True).all()
+        gamename = Game_info.objects.all()
         lst = Category.objects.order_by('name').all()
         return render(request,'app/search_page.html', {'gamename':gamename,'lists':lst})
 
