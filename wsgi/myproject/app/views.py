@@ -278,7 +278,7 @@ def category_list(request, pk):
     tlst2 = Game_info.objects.filter(category_id=pk).filter(is_active = True).all()
     image = Image.objects.all()
     name = Category.objects.get(pk=pk)
-    return render(request, 'app/category_list.html', {'lst': lst,'lst2': tlst2, 'name': name, 'image', image})
+    return render(request, 'app/category_list.html', {'lst': lst,'lst2': tlst2, 'name': name, 'image': image})
 
 def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
