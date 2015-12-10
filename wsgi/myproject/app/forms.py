@@ -64,6 +64,8 @@ class ImageForm(forms.ModelForm):
         fields = ['thumbnail', 'img1', 'img2', 'img3', 'img4']
         
 class FeedbackForm(forms.ModelForm):
+    tchoices = ((0,0),(1,1),(2,2),(3,3),(4,4),(5,5))
+    rating = forms.ChoiceField(widget=forms.RadioSelect, choices=tchoices)
     class Meta:
         model = Feedback
         fields = ['comment', 'rating' ]
