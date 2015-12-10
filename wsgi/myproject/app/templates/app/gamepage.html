@@ -211,7 +211,14 @@
                 <form method="POST" class="post-form">
                     <div class="modal-body">
                         {% csrf_token %}
-                        {{ form.as_p }}
+                        <h5>Comment:</h5>
+                        {{ form.comment}}
+                        <h5>
+                        Rating:
+                        {% for radio in form.rating %}
+                            <div class="myradio">{{radio}} </div>
+                        {% endfor %}
+                        </h5>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
