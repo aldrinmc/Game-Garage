@@ -370,8 +370,7 @@ def searchgame_name(request):
         gamename = Game_info.objects.filter(title__istartswith=search_name)
         allgame = Game_info.objects.all()
         lst = Category.objects.order_by('name').all()
-        #return render(request, 'app/searchgame_page.html', {'gamename': gamename, 'lst': lst, 'search_name': search_name, 'allgame': allgame})
-        return render_to_response('app/searchgame_page.html', {'gamename': gamename, 'lst': lst, 'search_name': search_name})
+        return render(request, 'app/searchgame_page.html', {'gamename': gamename, 'lst': lst, 'search_name': search_name, 'allgame': allgame})
     else:
         gamename = Game_info.objects.all()
         lst = Category.objects.order_by('name').all()
