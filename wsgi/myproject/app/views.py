@@ -156,7 +156,7 @@ def view_games(request):
 @login_required
 def update_game(request, pk):
     post = get_object_or_404(Game_info, pk=pk)
-    post_sys = get_object_or_404(System_requirement, gameinfo_id=pk)
+    post_sys = System_requirement.objects.filter(gameinfo_id = pk)[len(System_requirement.objects.filter(gameinfo_id = pk))-1]
     post_image = get_object_or_404(Image, game_id=pk)
     deleted = post.is_active
     if request.method == "POST":
@@ -167,6 +167,7 @@ def update_game(request, pk):
             model = form.save(commit=False)
             image = image_form.save(commit=False)
             sysreq = sys.save(commit=False)
+            sysreq.save()
             model.is_active = True
             model.save()
             image.save()
@@ -296,7 +297,7 @@ def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
     lst = Category.objects.filter(is_active = True).all()
     lst3 = Feedback.objects.filter(game=pk).all()
-    sysreq = get_object_or_404(System_requirement, gameinfo_id=pk)
+    sysreq = System_requirement.objects.filter(gameinfo_id = pk)[len(System_requirement.objects.filter(gameinfo_id = pk))-1]
     image = Image.objects.get(game_id=lst2)
     plat = lst2.platform.all()
     if request.user.is_authenticated():
@@ -374,7 +375,7 @@ def searchgame_name(request):
     else:
         gamename = Game_info.objects.all()
         lst = Category.objects.order_by('name').all()
-        return render(request,'app/search_page.html', {'gamename':gamename,'lists':lst})
+        return render(request,'app/search_page.html', {'gamename':gamename,'lst':lst})
 
 def succ_pass(request):
     lst = Category.objects.filter(is_active = True).all()
