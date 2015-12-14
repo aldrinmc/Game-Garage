@@ -5,7 +5,7 @@ from django.template import RequestContext
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserForm, AddCategoryForm, AddGameForm, ChangePasswordForm, Form, ImageForm, FeedbackForm, PlatForm, System_ReqForm
-from .models import User, Category, Game_info, Game_request, Image, Feedback,Platform
+from .models import User, Category, Game_info, Game_request, Image, Feedback, Platform, System_requirement
 from django.utils.crypto import get_random_string
 from django.core.mail import send_mail
 import random
@@ -135,12 +135,11 @@ def add_game(request):
             image.game_id = game_id
             image.save()
             return redirect('app.views.view_games')
-        elif form.is_valid() == False :
+        else :
             gamelist = Game_info.objects.all()
             for i in gamelist:
                 if i.title == request.POST['title']:
                     return redirect('app.views.update_game', i.id)
-
     else:
         form = AddGameForm()
         image_form = ImageForm()
@@ -155,6 +154,7 @@ def view_games(request):
 @login_required
 def update_game(request, pk):
     post = get_object_or_404(Game_info, pk=pk)
+    post_sys = get_object_or_404(System_requirement, pk=pk)
     post_image = get_object_or_404(Image, game_id=pk)
     if request.method == "POST":
         form = AddGameForm(request.POST, instance=post)
@@ -173,8 +173,9 @@ def update_game(request, pk):
             return redirect('app.views.view_games')
     else:
         form = AddGameForm(instance=post)
+        sys = System_ReqForm(instance = post_sys)
         image_form = ImageForm(instance=post_image)
-    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form})  
+    return render(request, 'app/admin/add_game.html', {'form': form,'sys':sys, 'image': image_form})  
 
 @login_required
 def add_requested(request, pk):
@@ -197,6 +198,11 @@ def add_requested(request, pk):
             post.is_active = False
             post.save()
             return redirect('app.views.view_games')
+        else :
+            gamelist = Game_info.objects.all()
+            for i in gamelist:
+                if i.title == request.POST['title']:
+                    return redirect('app.views.update_game', i.id)
     else:
         form = AddGameForm(instance=post)
         sys = System_ReqForm()
@@ -284,7 +290,9 @@ def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
     lst = Category.objects.filter(is_active = True).all()
     lst3 = Feedback.objects.filter(game=pk).all()
+    sysreq = System_requirement.objects.get(pk = pk)
     image = Image.objects.get(game_id=lst2)
+    plat = lst2.platform.all()
     if request.user.is_authenticated():
         if request.method == "POST":
             form = FeedbackForm(request.POST)
@@ -295,9 +303,9 @@ def gamepage(request, pk): # basic game page feel free to change it
                 post.save()
         else:
             form = FeedbackForm()
-        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'form':form, 'lst3': lst3, 'image': image})
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'form':form, 'lst3': lst3, 'sysreq':sysreq, 'plat':plat, 'image': image})
     else:
-        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'lst3': lst3, 'image': image})
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'lst3': lst3, 'sysreq':sysreq, 'plat':plat, 'image': image})
 
 @login_required
 def viewreq(request):
