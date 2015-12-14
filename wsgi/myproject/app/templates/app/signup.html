@@ -5,64 +5,140 @@
 {% endblock title %}
 
 {% block content %}
-    <div class="container" style="padding-top: 50px">
-        <div class="row vertical-offset-100">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Sign up</h3>
-                    </div>
-                    <div class="panel-body">
-                        <form method="POST" accept-charset="UTF-8" role="form" id="myform">
-                        {% if signup_success == True %}
-                            <br>
-                            <div class="alert alert-success"><strong>Successfully Signed up.</strong><a href="{% url "app.views.user_login" %}">  Click here to Login</a></div>
-                        {% endif %}
-                            {% csrf_token %}
-                            <fieldset>
-                                <div class="form-group">
-                                    <input name="fname" type="text" class="form-control" placeholder="First Name"
-                                           required>
-                                </div>
-                                <div class="form-group">
-                                    <input name="lname" type="text" class="form-control" placeholder="Last Name"
-                                           required>
-                                </div>
-                                <div class="form-group">
-                                    <input name="contact_number" type="text" class="form-control"
-                                           placeholder="Contact Number" required>
-                                </div>
-                                <div class="form-group">
-                                    <input name="email" type="email" class="form-control" placeholder="Email" required>
-                                </div>
-                                <div class="form-group">
-                                    <input id="password" name="password" type="password" class="form-control" placeholder="Password"
-                                           required>
-                                </div>
-                                <div class="form-group">
-                                    <input id="password_again" name="password_again" type="password" class="form-control" placeholder="Confirm Password"
-                                           required>
-                                </div>
-                                <button type="submit" class="save btn btn-default" value="Validate!">Signup</button>
-                            </fieldset>
-                        </form>
-                    </div>
-                </div>
+    <!--main content start-->
+      <section id="main-content">
+          <section class="wrapper">
+          <div class="row">
+                
             </div>
-        </div>
-    </div>
-    <script>
-        jQuery.validator.setDefaults({
-            debug: true,
-            success: "valid"
-        });
-        $("#myform").validate({
-            rules: {
-                password: "required",
-                password_again: {
-                    equalTo: "#password"
-                }
-            }
-        });
-    </script>
+              <!-- Form validations -->  
+
+              <div class="row">
+                <center>
+                 <div class="col-lg-3"></div>
+                  <div class="col-lg-6">
+                    <div style="padding-top: 20px">
+                        <h1>Sign Up</h1>
+                    </div>
+                      <section class="panel">
+                          <div class="panel-body">
+                              <div class="form"  align="center">
+                                  <form method="POST" class="form-horizontal" role="form">
+                                  {% csrf_token %}
+                                  {% if success %}
+                                    <div class="alert alert-success">
+                                      <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                      <strong>Success!</strong> {{ success }}
+                                    </div>
+                                  {% endif %}
+
+                                  {% if exist %}
+                                  <div class="alert alert-warning">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                    <strong>Warning!</strong> {{ exist }}
+                                  </div>
+                                  {% endif %}
+                                      
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">First Name <span class="required">*</span></label>
+                                          <div class="col-lg-3">
+                                              <input class="form-control" name="fname" type="text" placeholder="First Name" required/>
+                                          </div>
+                                      </div>
+                                      
+                                      <div class="form-group ">
+                                          <label for="cname" class="control-label col-lg-2">Last Name <span class="required">*</span></label>
+                                          <div class="col-lg-3">
+                                              <input class="form-control" name="lname" type="text" placeholder="Last Name" required/>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label for="cemail" class="control-label col-lg-2">E-Mail <span class="required">*</span></label>
+                                          <div class="col-lg-5">
+                                            <input name="email" type="email" class="form-control" placeholder="Email" id="mail" onkeyup="checkMail(); return false;" required><span id="confirmMail" class="confirmMessage"></span>
+                                          </div>
+                                      </div>
+                                      
+                                      <div class="form-group ">
+                                          <label class="control-label col-lg-2">Contact Number <span class="required">*</span></label>
+                                          <div class="col-lg-3">
+                                              <input class="form-control" name="contact_number" type="text" placeholder="Contact Number" data-validation="number" required/>
+                                          </div>
+                                      </div>
+                                      
+                                      <div class="form-group ">
+                                          <label for="cname" class="control-label col-lg-2">Password <span class="required">*</span></label>
+                                          <div class="col-lg-3">
+                                              <input name="password" type="password" class="form-control" placeholder="Password" id="pass1" required>
+                                          </div>
+                                      </div>
+
+                                      <div class="form-group ">
+                                          <label for="cname" class="control-label col-lg-2">Re-type Password <span class="required">*</span></label>
+                                          <div class="col-lg-3">
+                                              <input name="password" type="password" class="form-control" placeholder="Re-enter Password" id="pass2" onkeyup="checkPass(); return false;" required><span id="confirmMessage" class="confirmMessage"></span>
+                                          </div>
+                                      </div>
+                                                                            
+                                      <div class="form-group">
+                                          <div class="col-lg-offset-2 col-lg-10">
+                                              <button class="btn btn-primary" type="submit">Register</button>
+                                              <button class="btn btn-default" type="button">Cancel</button>
+                                          </div>
+                                      </div>
+                                  </form>
+                                  <script type="text/javascript">
+                                    function checkPass(){
+                                      var pass1 = document.getElementById('pass1');
+                                      var pass2 = document.getElementById('pass2');
+                                      var message = document.getElementById('confirmMessage');
+                                      var goodColor = "#b6ffc7";
+                                      var goodColor_font = "#66cc66"
+                                      var badColor = "#ffdada";
+                                      var badColor_font = "#ff3f3f";
+                                      if(pass1.value == pass2.value){
+                                          pass2.style.backgroundColor = goodColor;
+                                          message.style.color = goodColor_font;
+                                          message.innerHTML = "Passwords Match!"
+                                          document.getElementById("submit_button").disabled = false;
+                                      }
+                                      else{
+                                          pass2.style.backgroundColor = badColor;
+                                          message.style.color = badColor_font;
+                                          message.innerHTML = "Passwords Do Not Match!"
+                                          document.getElementById("submit_button").disabled = true;
+                                      }
+                                    }
+                                    function checkMail(){
+                                      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                                      var mail = document.getElementById('mail');
+                                      var message_mail = document.getElementById('confirmMail');
+                                      var goodColor = "#b6ffc7";
+                                      var goodColor_font = "#66cc66"
+                                      var badColor = "#ffdada";
+                                      var badColor_font = "#ff3f3f";
+                                      if(mail.value.match(mailformat)){
+                                        message_mail.innerHTML = "Valid mail"
+                                        mail.style.backgroundColor = goodColor;
+                                        message_mail.style.color = goodColor_font;
+                                      }  
+                                      else{
+                                        message_mail.innerHTML = "Invalid mail (valid mail: mymail@example.com)"
+                                        mail.style.backgroundColor = badColor;
+                                        message_mail.style.color = badColor_font;
+                                      }
+                                    }
+                                    </script>
+                              </div>
+
+                          </div>
+                      </section>
+                  </div>
+                   <div class="col-lg-3"></div>
+              </div>
+              <!-- page end-->
+          </section>
+      </section>
+      <!--main content end-->
 {% endblock content %}
