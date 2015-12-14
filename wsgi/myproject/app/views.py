@@ -125,13 +125,15 @@ def add_game(request):
         image_form = ImageForm(request.POST, request.FILES)
         if form.is_valid() and image_form.is_valid():
             model = form.save(commit=False)
-            preq = sys.save()
             image = image_form.save(commit=False)
-            model.System_req = preq
+            sysreq = sys.save(commit=False)
+            model.is_active = True
             model.save()
             image.save()
             form.save_m2m()
             game_id = Game_info.objects.get(id=model.pk)
+            sysreq.gameinfo_id = game_id
+            sysreq.save()
             image.game_id = game_id
             image.save()
             return redirect('app.views.view_games')
@@ -154,7 +156,7 @@ def view_games(request):
 @login_required
 def update_game(request, pk):
     post = get_object_or_404(Game_info, pk=pk)
-    post_sys = get_object_or_404(System_requirement, pk=pk)
+    post_sys = get_object_or_404(System_requirement, gameinfo_id=pk)
     post_image = get_object_or_404(Image, game_id=pk)
     deleted = post.is_active
     if request.method == "POST":
@@ -164,11 +166,14 @@ def update_game(request, pk):
         if form.is_valid() and image_form.is_valid():
             model = form.save(commit=False)
             image = image_form.save(commit=False)
+            sysreq = sys.save(commit=False)
             model.is_active = True
             model.save()
             image.save()
             form.save_m2m()
             game_id = Game_info.objects.get(id=model.pk)
+            sysreq.gameinfo_id = game_id
+            sysreq.save()
             image.game_id = game_id
             image.save()
             return redirect('app.views.view_games')
@@ -187,17 +192,17 @@ def add_requested(request, pk):
         image_form = ImageForm(request.POST, request.FILES)
         if form.is_valid():
             model = form.save(commit=False)
-            preq = sys.save()
             image = image_form.save(commit=False)
-            model.System_req = preq
+            sysreq = sys.save(commit=False)
+            model.is_active = True
             model.save()
             image.save()
             form.save_m2m()
             game_id = Game_info.objects.get(id=model.pk)
+            sysreq.gameinfo_id = game_id
+            sysreq.save()
             image.game_id = game_id
             image.save()
-            post.is_active = False
-            post.save()
             return redirect('app.views.view_games')
         else :
             gamelist = Game_info.objects.all()
@@ -291,7 +296,7 @@ def gamepage(request, pk): # basic game page feel free to change it
     lst2 =  Game_info.objects.get(pk=pk)
     lst = Category.objects.filter(is_active = True).all()
     lst3 = Feedback.objects.filter(game=pk).all()
-    sysreq = System_requirement.objects.get(pk = pk)
+    sysreq = get_object_or_404(System_requirement, gameinfo_id=pk)
     image = Image.objects.get(game_id=lst2)
     plat = lst2.platform.all()
     if request.user.is_authenticated():
