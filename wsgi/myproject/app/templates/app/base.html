@@ -10,124 +10,145 @@
     <link rel="stylesheet" href="{% static "css/bootstrap-theme.min.css" %}">
     <link rel="stylesheet" href="{% static "css/popuo-box.css" %}">
     <link rel="stylesheet" href="{% static "css/style2.css" %}">
+    <link rel="stylesheet" href="{% static "css/style3.css" %}">
     <link class="rs-file" rel="stylesheet" href="{% static "royalslider/skins/default/rs-default.css" %}">
     <link class="rs-file" rel="stylesheet" href="{% static "royalslider/royalslider.css" %}">
     <link class="rs-file" rel="stylesheet" href="{% static "css/royalslider2.css" %}">
+    <link class="rs-file" rel="stylesheet" href="{% static "css/jquery-ui.css" %}">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://jqueryvalidation.org/files/demo/site-demos.css">
     <link href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-    <title>Game Garage</title>
+    <link rel="icon" type="image/png" href="{% static "images/fav.png" %}">
+    <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
-    <!-- jQuery -->
-    <script src="{% static "js/jquery-1.11.0.min.js" %}"></script>
-    <script class="rs-file" src="{% static "royalslider/jquery.royalslider.min.js" %}"/>
-    <script src="{% static "vegas/vegas.min.js" %}"></script>
-
+<!-- jQuery -->
+<script src="{% static "js/jquery-1.11.0.min.js" %}"></script>
+<script class="rs-file" src="{% static "royalslider/jquery.royalslider.min.js" %}"/>
+<script src="{% static "vegas/vegas.min.js" %}"></script>
+<script src="{% static "js/jquery-ui.js" %}"></script>
 {#    <script src="{% static "js/jquery.js" %}"></script>#}
-    <script src="{% static "js/jquery.magnific-popup.js" %}"></script>
-    <script src="{% static "js/jquery.mixitup.min.js" %}"></script>
-    <script src="{% static "js/modernizr.custom.53451.js" %}"></script>
+<script src="{% static "js/jquery.magnific-popup.js" %}"></script>
+<script src="{% static "js/jquery.mixitup.min.js" %}"></script>
+<script src="{% static "js/modernizr.custom.53451.js" %}"></script>
 
-    <!-- Bootstrap Core JavaScript -->
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
-    <div class="header">
-        <div class="container">
-            <div class="logo">
-                <a href="{% url "user_home" %}"><img src="{% static "images/logo.png" %}" alt=""></a>
-            </div>
-            <span class="menu"></span>
-            <div class="navigation">
-                <ul class="navig cl-effect-3" >
-                    <li><a href="{% url "user_home" %}">Home</a></li>
-                    <li class="dropdown">
-                        <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Category
-                                <span class="caret"></span>
+<!-- Bootstrap Core JavaScript -->
+<script src="{% static "js/bootstrap.min.js" %}"></script>
+<div class="header">
+    <div class="container">
+        <div class="logo">
+            <a href="{% url "user_home" %}"><img src="{% static "images/logo.png" %}" alt=""></a>
+        </div>
+        <span class="menu"></span>
+
+        <div class="navigation">
+            <ul class="navig cl-effect-3">
+                <li><a href="{% url "user_home" %}">Home</a></li>
+                <li class="dropdown">
+                    <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true"
+                       aria-expanded="false">
+                        Category
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu" role="menu">
+                        {% for list in lst %}
+                            {% if list.is_active == True %}
+                                <li>
+                                    <a href="{% url "category_list" pk=list.pk %}"
+                                       style="color: black"> {{ list.name }} </a>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+
+                    </ul>
+                </li>
+                {% if user.is_authenticated %}
+                    <li>
+                        <a href="{% url "request" %}">Request</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{% url "about" %}">About</a>
+                    </li>
+                {% endif %}
+
+                <li class="dropdown">
+                    {% if user.is_authenticated %}
+                        <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            {{ user.first_name }}
+                            <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu" role="menu">
-                            {% for list in lst %}
-                                {% if list.is_active == True %}
-                                <li>
-                                    <a href="{% url "category_list" pk=list.pk%}" style="color: black"> {{ list.name }} </a>
-                                </li>
-                                {% endif %}
-                            {% endfor %}
-
+                            <li>
+                                <a href="{% url "changepassword" %}" style="color: black"> Change Password</a>
+                            </li>
+                            <li>
+                                <a href="{% url "user_logout" %}" style="color: black"> Log out</a>
+                            </li>
                         </ul>
-                    </li>
-                    {% if user.is_authenticated %}
-                        <li>
-                            <a href="{% url "request" %}">Request</a>
-                        </li>
-                    {% else %}
-                        <li>
-                            <a href="{% url "about" %}">About</a>
-                        </li>
+                    {% elif not user.is_authenticated %}
+                        <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button"
+                           aria-haspopup="true" aria-expanded="false">
+                            Guest
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li>
+                                <a href="{% url "user_login" %}" style="color: black"> Login</a>
+                            </li>
+                            <li>
+                                <a href="{% url "user_add" %}" style="color: black"> Signup</a>
+                            </li>
+                        </ul>
                     {% endif %}
 
-                    <li class="dropdown">
-                        {% if user.is_authenticated %}
-                            <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                {{ user.first_name }}
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu"   >
-                                <li>
-                                    <a href="{% url "changepassword" %}" style="color: black">  Change Password</a>
-                                </li>
-                                <li>
-                                    <a href="{% url "user_logout" %}" style="color: black">  Log out</a>
-                                </li>
-                            </ul>
-                        {% elif not user.is_authenticated %}
-                            <a id="dLabel" data-target="#" href="#" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Guest
-                                <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu" role="menu">
-                                <li>
-                                    <a href="{% url "user_login" %}" style="color: black">  Login</a>
-                                </li>
-                                <li>
-                                    <a href="{% url "user_add" %}" style="color: black">  Signup</a>
-                                </li>
-                            </ul>
-                        {% endif %}
 
-
-                    </li>
-                </ul>
-                <div class="search-bar">
-                        <form method="GET" action="{% url 'search' %}" accept-charset="UTF-8">
-                                <fieldset>
-                                    <input placeholder="Search" name="game_name" type="text">
-                                    <input type="submit" value=""/>
-                                </fieldset>
-                        </form>
-                </div>
-                <div class="clearfix"></div>
-                <script>
-                    $( "span.menu" ).click(function() {
-                      $( ".navigation" ).slideToggle( "slow", function() {
-                        // Animation complete.
-                      });
+                </li>
+            </ul>
+            <script>
+                $(function () {
+                    var availableSearch = [
+                        {% for list in games %}
+                            {% if list.is_active == True %}
+                                "{{ list.title   }}",
+                            {% endif %}
+                        {% endfor %}
+                    ];
+                    $("#searchGame").autocomplete({
+                        source: availableSearch
                     });
-                </script>
-
+                });
+            </script>
+            <div class="search-bar">
+                <form method="GET" action="{% url 'search' %}" accept-charset="UTF-8">
+                    <fieldset>
+                        <input id="searchGame" placeholder="Search" name="game_name" type="text">
+                        <input type="submit" value=""/>
+                    </fieldset>
+                </form>
             </div>
             <div class="clearfix"></div>
+            <script>
+                $("span.menu").click(function () {
+                    $(".navigation").slideToggle("slow", function () {
+                        // Animation complete.
+                    });
+                });
+            </script>
         </div>
+        <div class="clearfix"></div>
     </div>
+</div>
 <!-- Header Ends Here -->
 
-    <!-- Content -->
-    {% block content %}
-    {% endblock %}
-    <!-- Content Ends Here-->
+<!-- Content -->
+{% block content %}
+{% endblock %}
+<!-- Content Ends Here-->
 
 <!-- Footer -->
-    <div style="padding-top: 30%"></div>
+{#<div style="padding-top: 30%"></div>#}
 <div class="footer">
     <div class="container">
         <ul class="social">
@@ -137,7 +158,7 @@
         </ul>
         <p>Created by <a href="#">TeamGamers</a></p>
     </div>
-    
+
 </div>
 <!-- Footer Ends Here -->
 </body>
