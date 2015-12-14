@@ -1,6 +1,10 @@
 {% extends "app/admin/base.html" %}
 
 {% block content %}
+{% if deleted == False %}
+                            <br>
+<div class="alert alert-success"><strong>This is a previously deleted game click save to re-enable it</strong></div>
+{% endif %}
  <h1>Add New Game Information</h1>
     <form method="POST" class="post-form" enctype="multipart/form-data">
     	{% csrf_token %}
