@@ -11,14 +11,12 @@
           <div class="row">
                 
             </div>
-              <!-- Form validations -->  
-
               <div class="row">
                 <center>
                  <div class="col-lg-3"></div>
-                  <div class="col-lg-6">
-                    <div style="padding-top: 20px">
-                        <h1>Sign Up</h1>
+                  <div class="col-lg-10">
+                    <div style="padding-top: 60px" align="left">
+                        <h1>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbspSign Up</h1>
                     </div>
                       <section class="panel">
                           <div class="panel-body">
@@ -52,7 +50,7 @@
                                       </div>
 
                                       <div class="form-group ">
-                                          <label for="cemail" class="control-label col-lg-2">E-Mail <span class="required">*</span></label>
+                                          <label for="cemail" class="control-label col-lg-2">Email <span class="required">*</span></label>
                                           <div class="col-lg-5">
                                             <input name="email" type="email" class="form-control" placeholder="Email" id="mail" onkeyup="checkMail(); return false;" required><span id="confirmMail" class="confirmMessage"></span>
                                           </div>
@@ -68,12 +66,12 @@
                                       <div class="form-group ">
                                           <label for="cname" class="control-label col-lg-2">Password <span class="required">*</span></label>
                                           <div class="col-lg-3">
-                                              <input name="password" type="password" class="form-control" placeholder="Password" id="pass1" required>
+                                              <input name="password" type="password" data-validation="length" class="form-control" placeholder="Password" id="pass1" data-validation-length="6-22" required>
                                           </div>
                                       </div>
 
                                       <div class="form-group ">
-                                          <label for="cname" class="control-label col-lg-2">Re-type Password <span class="required">*</span></label>
+                                          <label for="cname" class="control-label col-lg-2">Re-enter Password <span class="required">*</span></label>
                                           <div class="col-lg-3">
                                               <input name="password" type="password" class="form-control" placeholder="Re-enter Password" id="pass2" onkeyup="checkPass(); return false;" required><span id="confirmMessage" class="confirmMessage"></span>
                                           </div>
@@ -81,11 +79,15 @@
                                                                             
                                       <div class="form-group">
                                           <div class="col-lg-offset-2 col-lg-10">
-                                              <button class="btn btn-primary" type="submit">Register</button>
-                                              <button class="btn btn-default" type="button">Cancel</button>
+                                              <button class="btn btn-primary" type="submit">Register</button>&nbsp&nbsp&nbsp
+                                              <a href="http://127.0.0.1:8000/">Cancel Registration</a>
                                           </div>
                                       </div>
                                   </form>
+                                  <!--Form validation -->
+                                  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+                                  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.2.8/jquery.form-validator.min.js"></script>
+                                  <script> $.validate(); </script>
                                   <script type="text/javascript">
                                     function checkPass(){
                                       var pass1 = document.getElementById('pass1');
@@ -98,13 +100,13 @@
                                       if(pass1.value == pass2.value){
                                           pass2.style.backgroundColor = goodColor;
                                           message.style.color = goodColor_font;
-                                          message.innerHTML = "Passwords Match!"
+                                          message.innerHTML = ""
                                           document.getElementById("submit_button").disabled = false;
                                       }
                                       else{
                                           pass2.style.backgroundColor = badColor;
                                           message.style.color = badColor_font;
-                                          message.innerHTML = "Passwords Do Not Match!"
+                                          message.innerHTML = ""
                                           document.getElementById("submit_button").disabled = true;
                                       }
                                     }
@@ -117,12 +119,12 @@
                                       var badColor = "#ffdada";
                                       var badColor_font = "#ff3f3f";
                                       if(mail.value.match(mailformat)){
-                                        message_mail.innerHTML = "Valid mail"
+                                        message_mail.innerHTML = ""
                                         mail.style.backgroundColor = goodColor;
                                         message_mail.style.color = goodColor_font;
                                       }  
                                       else{
-                                        message_mail.innerHTML = "Invalid mail (valid mail: mymail@example.com)"
+                                        message_mail.innerHTML = "Please enter a valid email address"
                                         mail.style.backgroundColor = badColor;
                                         message_mail.style.color = badColor_font;
                                       }
