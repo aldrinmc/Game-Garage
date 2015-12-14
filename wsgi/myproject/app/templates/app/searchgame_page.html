@@ -1,22 +1,39 @@
 {% extends "app/base.html" %}
 
 {% block content %}
-    <br>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-        </tr>
-        </thead>
-        <tbody>
-            {% if gamename %}
-                {% for gamename in gamename %}
-                    {% if gamename.is_active == True%}
-                        <tr>
-                            <td><a href="{% url "gamepage" pk=gamename.pk %}">{{ gamename.title }}</a></td>
-                        </tr>
-                    {% endif %} 
+        <div class="panel">
+        <div class="panel-body">
+                {% for list in gamename %}
+                    {% if list.is_active == True %}
+                        <div class="row">
+                        <div class="col-md-1">
+                            {% for i in image %}
+                                {% if i.game_id.pk == list.pk %}
+                                    <a href="#">
+                                        <img class="img-responsive" src="/static/images/{{ i.thumbnail }}"
+                                             alt="">
+                                    </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div class="col-md-5">
+                            <h1>{{ list.title }}</h1>
+                            <h4>
+                                <small>{{ list.platform }}</small>
+                            </h4>
+
+                            <p>{{ list.description|slice:":250" }}...</p>
+                            <a class="btn btn-primary" href="{% url "gamepage" pk=list.pk %}">View Game <span
+                                    class="glyphicon glyphicon-chevron-right"></span></a>
+                        </div>
+                        <div class="col-md-6"></div>
+                        </div>
+                        <!-- /.row -->
+
+                        <hr>
+                    {% endif %}
                 {% endfor %}
-            {% endif %}
-        </tbody>
-    </table>
+    </div>
+    </div>  
 {% endblock %}
