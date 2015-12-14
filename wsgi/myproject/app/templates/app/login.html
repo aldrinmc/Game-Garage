@@ -1,36 +1,30 @@
-
 {% extends "app/base.html" %}
 
+{% block title %}
+    GameGarage | Login
+{% endblock title %}
+
 {% block content %}
-    <div class="container" style="padding-top: 50px">
-    <div class="row vertical-offset-100">
-    <div class="col-md-4 col-md-offset-4">
-    <div class="panel panel-default">
-    <div class="panel-heading">
-    <h3 class="panel-title">Log in</h3>
-    </div>
-        {% if log_fail == True %}
-          <br>
-          <div class="alert alert-warning">Incorrect Email or Password</div>
-        {% endif %}
-          <div class="panel-body">
-            <form method="POST" accept-charset="UTF-8" role="form">
-            {% csrf_token %}
-                <fieldset>
-                  <div class="form-group">
-                    <input class="form-control" placeholder="E-mail" name="email" type="text">
-                  </div>
-                  <div class="form-group">
-                    <input class="form-control" placeholder="Password" name="password" type="password" value="">
-                  </div>
-                  <input class="btn btn-lg btn-success btn-block" type="submit" value="Login"><br>
-                  <span class="pull-left"><a href="{% url "app.views.request_password" %}">Forgot Password?</a></span>
-                  <span class="pull-right"><a href="{% url "app.views.user_add" %}">Register</a></span>
-                </fieldset>
+    <div class="login-06">
+        <div class="sixth-login">
+            <form method="POST" class="six" role="form">
+                {% csrf_token %}
+                <div class="light-b">
+                    <p>Email Address</p>
+                    <li>
+                        <input type="text" value="" onfocus="this.value='';"
+                               onblur="if (this.value == '') {this.value ='';}" name="email"><a class=" icons6 user6"></a>
+                    </li>
+                </div>
+                <div class="dark-o">
+                    <p>Password</p>
+                    <li>
+                        <input type="password" value="" onfocus="this.value = '';"
+                               onblur="if (this.value == '') {this.value = '';}" name="password"><a class=" icons6 lock6"></a>
+                    </li>
+                </div>
+                <input type="submit" value="Login">
             </form>
-    </div>
-    </div>
-    </div>
-    </div>
+        </div>
     </div>
 {% endblock content %}
