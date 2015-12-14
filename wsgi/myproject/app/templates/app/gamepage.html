@@ -102,13 +102,13 @@
                                 <small>minimum</small>
                             </h3>
                             <hr>
-                            <p><strong>Processor: {{ lst2.processor_min }}</strong></p>
+                            <p><strong>Processor: {{ sysreq.processor_min }}</strong></p>
 
-                            <p><strong>Memory: {{ lst2.memory_min }}</strong></p>
+                            <p><strong>Memory: {{ sysreq.memory_min }}</strong></p>
 
-                            <p><strong>Graphics: {{ lst2.graphics_min }}</strong></p>
+                            <p><strong>Graphics: {{ sysreq.graphics_min }}</strong></p>
 
-                            <p><strong>Storage: {{ lst2.storage_min }}</strong></p>
+                            <p><strong>Storage: {{ sysreq.storage_min }}</strong></p>
 
                         </div>
                         <div class="col-md-5">
@@ -116,18 +116,21 @@
                                 <small>recommend</small>
                             </h3>
                             <hr>
-                            <p><strong>Processor: {{ lst2.processor_rec }}</strong></p>
+                            <p><strong>Processor: {{ sysreq.processor_rec }}</strong></p>
 
-                            <p><strong>Memory: {{ lst2.memory_rec }}</strong></p>
+                            <p><strong>Memory: {{ sysreq.memory_rec }}</strong></p>
 
-                            <p><strong>Graphics: {{ lst2.graphics_rec }}</strong></p>
+                            <p><strong>Graphics: {{ sysreq.graphics_rec }}</strong></p>
 
-                            <p><strong>Storage: {{ lst2.storage_rec }}</strong></p>
+                            <p><strong>Storage: {{ sysreq.storage_rec }}</strong></p>
 
                         </div>
                         <div class="col-md-1"></div>
                     </div>
-                    <p><strong>Compatibility: {{ lst2.compatible }}</strong></p>
+                    <p><strong>Compatibility: 
+                        {% for pla in plat %}
+                                , {{ pla.name }} 
+                        {% endfor %} </strong></p>
                 </div>
             </div>
 
@@ -216,8 +219,11 @@
                         <h5>
                         Rating:
                         {% for radio in form.rating %}
-                            <div class="myradio">{{radio}} </div>
+                            <div class="myradio">
+                                {{ radio }}
+                            </div>
                         {% endfor %}
+                        
                         </h5>
                     </div>
                     <div class="modal-footer">
