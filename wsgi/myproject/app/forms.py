@@ -84,10 +84,9 @@ class System_ReqForm(forms.ModelForm):
     memory_rec =    forms.CharField(label='Memory Recommended    ')
     graphics_rec =  forms.CharField(label='Graphics Recommended  ')
     storage_rec = forms.CharField(label='Storage Recommended')
-    compatible = forms.CharField(label='Compatibility')
     class Meta:
         model = System_requirement
         fields = ['processor_min', 'memory_min', 'graphics_min', 
             'storage_min', 'processor_rec', 'memory_rec', 'graphics_rec',  
-            'storage_rec', 'compatible'
+            'storage_rec'
         ]
