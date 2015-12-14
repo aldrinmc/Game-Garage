@@ -156,6 +156,7 @@ def update_game(request, pk):
     post = get_object_or_404(Game_info, pk=pk)
     post_sys = get_object_or_404(System_requirement, pk=pk)
     post_image = get_object_or_404(Image, game_id=pk)
+    deleted = post.is_active
     if request.method == "POST":
         form = AddGameForm(request.POST, instance=post)
         sys = System_ReqForm(request.POST)
@@ -175,7 +176,7 @@ def update_game(request, pk):
         form = AddGameForm(instance=post)
         sys = System_ReqForm(instance = post_sys)
         image_form = ImageForm(instance=post_image)
-    return render(request, 'app/admin/add_game.html', {'form': form,'sys':sys, 'image': image_form})  
+    return render(request, 'app/admin/add_game.html', {'form': form,'sys':sys, 'image': image_form, 'deleted':deleted})  
 
 @login_required
 def add_requested(request, pk):
