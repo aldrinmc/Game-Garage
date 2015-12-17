@@ -12,7 +12,7 @@
                 
             </div>
               <div class="row">
-                <center>
+                <div style="align: center;">
                  <div class="col-lg-3"></div>
                   <div class="col-lg-10">
                     <div style="padding-top: 60px" align="left">
@@ -23,7 +23,6 @@
                               <div class="form"  align="center">
                                   <form method="POST" class="form-horizontal" role="form">
                                 {% if signup_success == True %}
-                                    <br>
                                     <div class="alert alert-success"><strong>Successfully Signed up.</strong><a href="{% url "app.views.user_login" %}">  Click here to Login</a></div>
                                 {% endif %}
                                   {% csrf_token %}
@@ -51,7 +50,7 @@
 
                                       <div class="form-group ">
                                           <label for="cemail" class="control-label col-lg-2">Email <span class="required">*</span></label>
-                                          <div class="col-lg-5">
+                                          <div class="col-lg-4">
                                             <input name="email" type="email" class="form-control" placeholder="Email" id="mail" onkeyup="checkMail(); return false;" required><span id="confirmMail" class="confirmMessage"></span>
                                           </div>
                                       </div>
@@ -79,8 +78,8 @@
                                                                             
                                       <div class="form-group">
                                           <div class="col-lg-offset-2 col-lg-10">
-                                              <button class="btn btn-primary" type="submit">Register</button>&nbsp&nbsp&nbsp
-                                              <a href="http://127.0.0.1:8000/">Cancel Registration</a>
+                                              <button id="submit_button" class="btn btn-primary" type="submit">Register</button>&nbsp&nbsp&nbsp
+                                              <a href="{% url "user_home" %}">Cancel Registration</a>
                                           </div>
                                       </div>
                                   </form>
@@ -100,13 +99,13 @@
                                       if(pass1.value == pass2.value){
                                           pass2.style.backgroundColor = goodColor;
                                           message.style.color = goodColor_font;
-                                          message.innerHTML = ""
+                                          message.innerHTML = "Password Match!"
                                           document.getElementById("submit_button").disabled = false;
                                       }
                                       else{
                                           pass2.style.backgroundColor = badColor;
                                           message.style.color = badColor_font;
-                                          message.innerHTML = ""
+                                          message.innerHTML = "Passwords Do Not Match"
                                           document.getElementById("submit_button").disabled = true;
                                       }
                                     }
@@ -119,7 +118,7 @@
                                       var badColor = "#ffdada";
                                       var badColor_font = "#ff3f3f";
                                       if(mail.value.match(mailformat)){
-                                        message_mail.innerHTML = ""
+                                        message_mail.innerHTML = "Valid Email Address"
                                         mail.style.backgroundColor = goodColor;
                                         message_mail.style.color = goodColor_font;
                                       }  
@@ -136,6 +135,7 @@
                       </section>
                   </div>
                    <div class="col-lg-3"></div>
+              </div>
               </div>
               <!-- page end-->
           </section>
