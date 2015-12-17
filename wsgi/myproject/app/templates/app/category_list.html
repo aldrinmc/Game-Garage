@@ -6,10 +6,11 @@
 
 {% block content %}
     <div class="panel">
+        <h1></h1>
         <div class="panel-body">
-                {% for list in lst2 %}
-                    {% if list.is_active == True and forloop.counter|divisibleby:2 %}
-                        <div class="row">
+            {% for list in lst2 %}
+                {% if list.is_active == True and forloop.counter|divisibleby:2 %}
+                    <div class="row">
                         <div class="col-md-7">
                             {% for i in image %}
                                 {% if i.game_id.pk == list.pk %}
@@ -24,26 +25,46 @@
                         <div class="col-md-5">
                             <h1>{{ list.title }}</h1>
                             <h4>
-                                <small>{{ list.platform }}</small>
+                                <small>
+                                    Platform: (
+                                    {% for i in list.platform.all %}
+                                        {% if forloop.counter == 1 %}
+                                            {{ i.name }}
+                                        {% else %}
+                                            ,{{ i.name }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    )
+                                </small>
                             </h4>
 
-                            <p>{{ list.description|slice:":250" }}...</p>
+                            <p style="text-indent: 2em">{{ list.description|slice:":250" }}...</p>
                             <a class="btn btn-primary" href="{% url "gamepage" pk=list.pk %}">View Game <span
                                     class="glyphicon glyphicon-chevron-right"></span></a>
                         </div>
-                        </div>
-                        <!-- /.row -->
+                    </div>
+                    <!-- /.row -->
 
-                        <hr>
-                    {% elif list.is_active == True and not forloop.counter|divisibleby:2 %}
-                        <div class="row">
+                    <hr>
+                {% elif list.is_active == True and not forloop.counter|divisibleby:2 %}
+                    <div class="row">
                         <div class="col-md-5">
                             <h1>{{ list.title }}</h1>
                             <h4>
-                                <small>{{ list.platform }}</small>
+                                <small>
+                                    Platform: (
+                                    {% for i in list.platform.all %}
+                                        {% if forloop.counter == 1 %}
+                                            {{ i.name }}
+                                        {% else %}
+                                            ,{{ i.name }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    )
+                                </small>
                             </h4>
 
-                            <p>{{ list.description|slice:":250" }}...</p>
+                            <p style="text-indent: 2em">{{ list.description|slice:":250" }}...</p>
                             <a class="btn btn-primary" href="{% url "gamepage" pk=list.pk %}">View Game <span
                                     class="glyphicon glyphicon-chevron-right"></span></a>
                         </div>
@@ -58,29 +79,13 @@
                             {% endif %}
                         {% endfor %}
                         </div>
-                        </div>
-                        <!-- /.row -->
+                    </div>
+                    <!-- /.row -->
 
-                        <hr>
-                    {% endif %}
-                {% endfor %}
-    </div>
-    </div>
-    </div>    {% comment %}    <br>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>{{name}}</th>
-        </tr>
-        </thead>
-        <tbody>
-            {% for list in lst2 %}
-                {% if list.is_active == True %}
-                    <tr>
-                        <td><a href="{% url "gamepage" pk=list.pk %}">{{ list.title }}</a></td>
-                    </tr>
+                    <hr>
                 {% endif %}
             {% endfor %}
-        </tbody>
-    </table>{% endcomment %}
+        </div>
+    </div>
+    </div>
 {% endblock %}
