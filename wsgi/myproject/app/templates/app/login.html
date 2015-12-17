@@ -8,10 +8,6 @@
     <div class="login-06">
         <div class="sixth-login">
             <form method="POST" class="six" role="form">
-            {% if log_fail == True %}
-                <br>
-                <div class="alert alert-danger"><strong>Wrong Password or email.</strong></div>
-            {% endif %}
                 {% csrf_token %}
                 
                 <div class="light-b">
@@ -29,9 +25,15 @@
                                onblur="if (this.value == '') {this.value = '';}" name="password"><a class=" icons6 lock6"></a>
                     </li>
                 </div>
-   
+                <div class="row">
+                    <div class="col-md-6"><p style="text-align: left; color: white"><a href="{% url "request_password" %}">Forgot Password?</a></p>
+                    </div>
+                    <div class="col-md-6"><p style="text-align: right; color: white"><a href="{% url "user_add" %}">Register</a></p></div>
+                </div>
                 <input type="submit" value="Login">
+
             </form>
+
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
             <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.2.8/jquery.form-validator.min.js"></script>
             <script> $.validate(); </script>
