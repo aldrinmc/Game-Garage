@@ -54,17 +54,12 @@ ALLOWED_HOSTS = [
     #'www.example.com', # Second DNS alias (set up in the app)
 ]
 
-EMAIL_USE_TLS = True
-
-EMAIL_HOST = 'smtp.sendgrid.net'
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'teamgamegarage@gmail.com'
+EMAIL_HOST_PASSWORD = 'gamers123'
 EMAIL_PORT = 587
-
-EMAIL_BACKEND = 'sgbackend.SendGridBackend'
-
-SENDGRID_USER = 'nparadiang483'
-
-SENDGRID_PASSWORD = 'gamers123'
+EMAIL_USE_TLS = True
 
 
 # Application definition
