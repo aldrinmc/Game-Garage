@@ -117,11 +117,14 @@ def user_home(request):
 
 
 ####################### ADMIN DASHBOARD ########################
-
 def user_admin(request):
     if request.user.is_authenticated() and request.user.is_admin:
+        games = Game_info.objects.filter(is_active=True).all()
+        req = Game_request.objects.filter(is_active=True).all()
+        cat = Category.objects.filter(is_active=True).all()
+        plat = Platform.objects.filter(is_active=True).all()
         admin = User.objects.get(pk=request.user.id)
-        return render(request, 'app/admin/index.html', {'user': admin})
+        return render(request, 'app/admin/index.html', {'user': admin, 'games': games, 'req': req, 'cat': cat, 'plat': plat})
     else:
         return redirect('app.views.user_home')
 
