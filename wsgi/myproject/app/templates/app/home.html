@@ -8,6 +8,14 @@
 {% block content %}
     <div class="banner"></div>
     <div class="panel">
+        <div class="banner-bot" style="background-color: #4FBFA8">
+            <div class="container">
+                <h2 style="color: white">Browse Games!</h2>
+
+                <p style="color: white">Looking for something else? Just want to browse through the massive Game library to
+                    find something new? Look through here to find something new to play!</p>
+            </div>
+        </div>
         <div class="panel-body">
             {% for list in games %}
                 {% if list.is_active == True and forloop.counter|divisibleby:2 %}
