@@ -111,7 +111,7 @@ def user_home(request):
 ####################### ADMIN DASHBOARD ########################
 
 def user_admin(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated() and request.user.is_admin:
         admin = User.objects.get(pk=request.user.id)
         return render(request, 'app/admin/index.html', {'user': admin})
     else:
@@ -119,109 +119,124 @@ def user_admin(request):
 
 @login_required
 def add_game(request):
-    if request.method == "POST":
-        form = AddGameForm(request.POST)
-        sys = System_ReqForm(request.POST)
-        image_form = ImageForm(request.POST, request.FILES)
-        if form.is_valid() and image_form.is_valid():
-            model = form.save(commit=False)
-            image = image_form.save(commit=False)
-            sysreq = sys.save(commit=False)
-            model.is_active = True
-            model.save()
-            image.save()
-            form.save_m2m()
-            game_id = Game_info.objects.get(id=model.pk)
-            sysreq.gameinfo_id = game_id
-            sysreq.save()
-            image.game_id = game_id
-            image.save()
-            return redirect('app.views.view_games')
-        else :
-            gamelist = Game_info.objects.all()
-            for i in gamelist:
-                if i.title == request.POST['title']:
-                    return redirect('app.views.update_game', i.id)
-    else:
-        form = AddGameForm()
-        image_form = ImageForm()
-        sys = System_ReqForm()
-    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form, 'sys': sys})
+	if request.user.is_admin:
+	    if request.method == "POST":
+	        form = AddGameForm(request.POST)
+	        sys = System_ReqForm(request.POST)
+	        image_form = ImageForm(request.POST, request.FILES)
+	        if form.is_valid() and image_form.is_valid():
+	            model = form.save(commit=False)
+	            image = image_form.save(commit=False)
+	            sysreq = sys.save(commit=False)
+	            model.is_active = True
+	            model.save()
+	            image.save()
+	            form.save_m2m()
+	            game_id = Game_info.objects.get(id=model.pk)
+	            sysreq.gameinfo_id = game_id
+	            sysreq.save()
+	            image.game_id = game_id
+	            image.save()
+	            return redirect('app.views.view_games')
+	        else :
+	            gamelist = Game_info.objects.all()
+	            for i in gamelist:
+	                if i.title == request.POST['title']:
+	                    return redirect('app.views.update_game', i.id)
+	    else:
+	        form = AddGameForm()
+	        image_form = ImageForm()
+	        sys = System_ReqForm()
+	    return render(request, 'app/admin/add_game.html', {'form': form, 'image': image_form, 'sys': sys})
+	else:
+		return redirect('app.views.user_home')
 
 @login_required
 def view_games(request):
-    lists=Game_info.objects.filter(is_active = True).all()
-    return render(request, 'app/admin/view_games.html', {'lists': lists})
+	if request.user.is_admin:
+	    lists=Game_info.objects.filter(is_active = True).all()
+	    return render(request, 'app/admin/view_games.html', {'lists': lists})
+	else:
+		return redirect('app.views.user_home')
 
 @login_required
 def update_game(request, pk):
-    post = get_object_or_404(Game_info, pk=pk)
-    post_sys = System_requirement.objects.filter(gameinfo_id = pk)[len(System_requirement.objects.filter(gameinfo_id = pk))-1]
-    post_image = get_object_or_404(Image, game_id=pk)
-    deleted = post.is_active
-    if request.method == "POST":
-        form = AddGameForm(request.POST, instance=post)
-        sys = System_ReqForm(request.POST)
-        image_form = ImageForm(request.POST, request.FILES, instance=post_image)
-        if form.is_valid() and image_form.is_valid():
-            model = form.save(commit=False)
-            image = image_form.save(commit=False)
-            sysreq = sys.save(commit=False)
-            sysreq.save()
-            model.is_active = True
-            model.save()
-            image.save()
-            form.save_m2m()
-            game_id = Game_info.objects.get(id=model.pk)
-            sysreq.gameinfo_id = game_id
-            sysreq.save()
-            image.game_id = game_id
-            image.save()
-            return redirect('app.views.view_games')
-    else:
-        form = AddGameForm(instance=post)
-        sys = System_ReqForm(instance = post_sys)
-        image_form = ImageForm(instance=post_image)
-    return render(request, 'app/admin/add_game.html', {'form': form,'sys':sys, 'image': image_form, 'deleted':deleted})  
+	if request.user.is_admin:
+	    post = get_object_or_404(Game_info, pk=pk)
+	    post_sys = System_requirement.objects.filter(gameinfo_id = pk)[len(System_requirement.objects.filter(gameinfo_id = pk))-1]
+	    post_image = get_object_or_404(Image, game_id=pk)
+	    deleted = post.is_active
+	    if request.method == "POST":
+	        form = AddGameForm(request.POST, instance=post)
+	        sys = System_ReqForm(request.POST)
+	        image_form = ImageForm(request.POST, request.FILES, instance=post_image)
+	        if form.is_valid() and image_form.is_valid():
+	            model = form.save(commit=False)
+	            image = image_form.save(commit=False)
+	            sysreq = sys.save(commit=False)
+	            sysreq.save()
+	            model.is_active = True
+	            model.save()
+	            image.save()
+	            form.save_m2m()
+	            game_id = Game_info.objects.get(id=model.pk)
+	            sysreq.gameinfo_id = game_id
+	            sysreq.save()
+	            image.game_id = game_id
+	            image.save()
+	            return redirect('app.views.view_games')
+	    else:
+	        form = AddGameForm(instance=post)
+	        sys = System_ReqForm(instance = post_sys)
+	        image_form = ImageForm(instance=post_image)
+	    return render(request, 'app/admin/add_game.html', {'form': form,'sys':sys, 'image': image_form, 'deleted':deleted})  
+	else:
+		return redirect('app.views.user_home')
 
 @login_required
 def add_requested(request, pk):
-    post = get_object_or_404(Game_request, pk=pk)
-    if request.method == 'POST':
-        form = AddGameForm(request.POST)
-        sys = System_ReqForm(request.POST)
-        image_form = ImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            model = form.save(commit=False)
-            image = image_form.save(commit=False)
-            sysreq = sys.save(commit=False)
-            model.is_active = True
-            model.save()
-            image.save()
-            form.save_m2m()
-            game_id = Game_info.objects.get(id=model.pk)
-            sysreq.gameinfo_id = game_id
-            sysreq.save()
-            image.game_id = game_id
-            image.save()
-            return redirect('app.views.view_games')
-        else :
-            gamelist = Game_info.objects.all()
-            for i in gamelist:
-                if i.title == request.POST['title']:
-                    return redirect('app.views.update_game', i.id)
-    else:
-        form = AddGameForm(instance=post)
-        sys = System_ReqForm()
-        image_form = ImageForm()
-    return render(request, 'app/admin/add_game.html', {'form': form, 'sys':sys, 'image': image_form})
-  
+	if request.user.is_admin:
+	    post = get_object_or_404(Game_request, pk=pk)
+	    if request.method == 'POST':
+	        form = AddGameForm(request.POST)
+	        sys = System_ReqForm(request.POST)
+	        image_form = ImageForm(request.POST, request.FILES)
+	        if form.is_valid():
+	            model = form.save(commit=False)
+	            image = image_form.save(commit=False)
+	            sysreq = sys.save(commit=False)
+	            model.is_active = True
+	            model.save()
+	            image.save()
+	            form.save_m2m()
+	            game_id = Game_info.objects.get(id=model.pk)
+	            sysreq.gameinfo_id = game_id
+	            sysreq.save()
+	            image.game_id = game_id
+	            image.save()
+	            return redirect('app.views.view_games')
+	        else :
+	            gamelist = Game_info.objects.all()
+	            for i in gamelist:
+	                if i.title == request.POST['title']:
+	                    return redirect('app.views.update_game', i.id)
+	    else:
+	        form = AddGameForm(instance=post)
+	        sys = System_ReqForm()
+	        image_form = ImageForm()
+	    return render(request, 'app/admin/add_game.html', {'form': form, 'sys':sys, 'image': image_form})
+	else:
+		return redirect('app.views.user_home')
+
 @login_required
 def delete_game(request, pk):
-    lists = Game_info.objects.get(pk=pk)
-    lists.is_active = False
-    lists.save()
-    return redirect('app.views.view_games')  
+	if request.user.is_admin:
+	    lists = Game_info.objects.get(pk=pk)
+	    lists.is_active = False
+	    lists.save()
+	    return redirect('app.views.view_games')  
+	else:
+		return redirect('app.views.user_home')
 
 @login_required
 def requested_games(request):
@@ -238,20 +253,24 @@ def category(request):
             post = form.save(commit=False)
             post.save()
             return redirect('app.views.category')
-    else:
+    elif request.user.is_admin:
         form = AddCategoryForm()
         lists = Category.objects.order_by('name').all()
     return render(request, 'app/admin/category.html', {'form': form, 'lists': lists})
 
 @login_required
 def delete_category(request, pk):
-    lists = Category.objects.get(pk=pk)
-    lists.is_active = False
-    lists.save()
-    return redirect('app.views.category')
+	if request.user.is_admin:
+	    lists = Category.objects.get(pk=pk)
+	    lists.is_active = False
+	    lists.save()
+	    return redirect('app.views.category')
+	else:
+		return redirect('app.views.user_home')
 
 def gameinfo(request):
     lst = Category.objects.filter(is_active = True).all()
+    games = Game_info.objects.filter(is_active=True).all()
     if request.method == "POST":
         form = AddGameForm(request.POST)
         if form.is_valid():
@@ -261,8 +280,7 @@ def gameinfo(request):
             return redirect('app.views.user_admin')
     else:
         form = AddGameForm()
-        return render(request, 'app/admin/gameinfo.html', {'form': form, 'lst':lst})
-
+        return render(request, 'app/admin/gameinfo.html', {'form': form, 'lst':lst, 'games':games})
 
 def request_password(request):
     if request.method == 'POST':
@@ -287,14 +305,16 @@ def request_password(request):
 ################################################################
 
 def category_list(request, pk):
+	games = Game_info.objects.filter(is_active=True).all()
     lst = Category.objects.filter(is_active = True).order_by('name').all()
     tlst2 = Game_info.objects.filter(category_id=pk).filter(is_active = True).all()
     image = Image.objects.all()
     name = Category.objects.get(pk=pk)
-    return render(request, 'app/category_list.html', {'lst': lst,'lst2': tlst2, 'name': name, 'image': image})
+    return render(request, 'app/category_list.html', {'lst': lst,'lst2': tlst2, 'name': name, 'image': image, 'games': games})
 
-def gamepage(request, pk): # basic game page feel free to change it
+def gamepage(request, pk):
     lst2 =  Game_info.objects.get(pk=pk)
+    games = Game_info.objects.filter(is_active=True).all()
     lst = Category.objects.filter(is_active = True).all()
     lst3 = Feedback.objects.filter(game=pk).all()
     sysreq = System_requirement.objects.filter(gameinfo_id = pk)[len(System_requirement.objects.filter(gameinfo_id = pk))-1]
@@ -310,14 +330,17 @@ def gamepage(request, pk): # basic game page feel free to change it
                 post.save()
         else:
             form = FeedbackForm()
-        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'form':form, 'lst3': lst3, 'sysreq':sysreq, 'plat':plat, 'image': image})
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'form':form, 'lst3': lst3, 'sysreq':sysreq, 'plat':plat, 'image': image, 'games': games})
     else:
-        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'lst3': lst3, 'sysreq':sysreq, 'plat':plat, 'image': image})
+        return render(request, 'app/gamepage.html', {'lst':lst,'lst2':lst2, 'lst3': lst3, 'sysreq':sysreq, 'plat':plat, 'image': image, 'games': games})
 
 @login_required
 def viewreq(request):
-    lists=Game_request.objects.all()
-    return render(request, 'app/admin/requested.html', {'lists': lists})
+	if request.user.is_admin:
+	    lists=Game_request.objects.all()
+	    return render(request, 'app/admin/requested.html', {'lists': lists})
+	else:
+		return redirect('app.views.user_home')
 
 @login_required
 def requestgame(request, template_name='app/request.html'):
@@ -335,10 +358,13 @@ def requestgame(request, template_name='app/request.html'):
 
 @login_required
 def delete_request(request, pk):
-    lists = Game_request.objects.get(pk=pk)
-    lists.is_active = False
-    lists.save()
-    return redirect('app.views.viewreq')
+	if request.user.is_admin:
+	    lists = Game_request.objects.get(pk=pk)
+	    lists.is_active = False
+	    lists.save()
+	    return redirect('app.views.viewreq')
+	else:
+		return redirect('app.views.user_home')
 
 @login_required
 def platform(request):
@@ -348,21 +374,25 @@ def platform(request):
             post = form.save(commit=False)
             post.save()
             return redirect('app.views.platform')
-    else:
+    elif request.user.is_admin:
         form = PlatForm()
         lists = Platform.objects.order_by('name').all()
     return render(request, 'app/admin/platform.html', {'form': form, 'lists': lists})
 
 @login_required
 def delete_platform(request, pk):
-    lists = Platform.objects.get(pk=pk)
-    lists.is_active = False
-    lists.save()
-    return redirect('app.views.platform')
+	if request.user.is_admin:
+	    lists = Platform.objects.get(pk=pk)
+	    lists.is_active = False
+	    lists.save()
+	    return redirect('app.views.platform')
+	else:
+		return redirect('app.views.user_home')
 
 def about_us(request):
     lst = Category.objects.filter(is_active = True).all()
-    return render(request, 'app/about.html', {'lst':lst})
+    games = Game_info.objects.filter(is_active=True).all()
+    return render(request, 'app/about.html', {'lst':lst, 'games': games})
 
 def searchgame_name(request):
     if request.method == "GET":
@@ -377,5 +407,6 @@ def searchgame_name(request):
         return render(request,'app/search_page.html', {'gamename':gamename,'lst':lst})
 
 def succ_pass(request):
+	games = Game_info.objects.filter(is_active=True).all()
     lst = Category.objects.filter(is_active = True).all()
-    return render(request, 'app/changepass_succ.html', {'lst':lst})
+    return render(request, 'app/changepass_succ.html', {'lst':lst, 'games': games})
