@@ -17,6 +17,7 @@ import string
 #######################USER###############################################################
 #######################USER###############################################################
 def user_add(request):
+    games = Game_info.objects.filter(is_active=True).all()
     lst = Category.objects.filter(is_active=True).all()
     try:
         if request.method == 'POST':
@@ -32,19 +33,20 @@ def user_add(request):
             user.contact_number = contact_number
             signup_success = True
             user.save()
-            return render(request, 'app/signup.html', {'signup_success': signup_success})
+            return render(request, 'app/signup.html', {'signup_success': signup_success, 'lst': lst, 'games': games})
 
         else:
             form = UserForm()
     except:
         form = UserForm()
-        return render(request, 'app/signup.html', {'form': form, 'lst': lst})
+        return render(request, 'app/signup.html', {'form': form, 'lst': lst, 'games': games})
 
-    return render(request, 'app/signup.html', {'form': form, 'lst': lst})
+    return render(request, 'app/signup.html', {'form': form, 'lst': lst, 'games': games})
 
 
 def user_login(request):
     lst = Category.objects.filter(is_active=True).all()
+    games = Game_info.objects.filter(is_active=True).all()
     if request.method == 'POST':
 
         try:
@@ -56,7 +58,7 @@ def user_login(request):
                 return redirect('app.views.user_home')
             else:
                 log_fail = True
-                return render(request, 'app/login.html', {'log_fail': log_fail})
+                return render(request, 'app/login.html', {'log_fail': log_fail, 'games': games})
 
         except User.DoesNotExist:
             return redirect('app.views.user_login')
@@ -64,8 +66,7 @@ def user_login(request):
     elif request.user.is_authenticated():
         return redirect('app.views.user_home')
 
-    return render(request, 'app/login.html', {'lst': lst})
-
+    return render(request, 'app/login.html', {'lst': lst, 'games': games})
 
 def user_logout(request):
     logout(request)
@@ -73,6 +74,8 @@ def user_logout(request):
 
 
 def password_change(request):
+    lst = Category.objects.filter(is_active=True).all()
+    games = Game_info.objects.filter(is_active=True).all()
     form = ChangePasswordForm(request.POST)
     if request.method == "POST" and form.is_valid():
         new_pass = form.cleaned_data['password']
@@ -80,13 +83,13 @@ def password_change(request):
         if new_pass == confirm_pass:
             request.user.set_password(form.cleaned_data['password'])
             request.user.save()
-            return redirect('app.views.succ_pass')
+            return redirect('app.views.user_login')
         else:
             pass_fail = True
-            return render(request, 'app/changepassword.html', {'pass_fail': pass_fail})
+            return render(request, 'app/changepassword.html', {'pass_fail': pass_fail, 'lst': lst, 'games': games})
     else:
         form = ChangePasswordForm()
-    return render(request, 'app/changepassword.html', {'form': form})
+    return render(request, 'app/changepassword.html', {'form': form, 'lst': lst, 'games': games})
 
 
 # if successfully log in, this function is called.
