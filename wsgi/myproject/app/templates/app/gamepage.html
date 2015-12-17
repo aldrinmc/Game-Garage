@@ -133,8 +133,13 @@
                     </div>
                     <p><strong>Compatibility: 
                         {% for pla in plat %}
-                                , {{ pla.name }} 
-                        {% endfor %} </strong></p>
+                                        {% if forloop.counter == 1 %}
+                                            {{ pla.name }}
+                                        {% else %}
+                                            ,{{ pla.name }}
+                                        {% endif %}
+                        {% endfor %}
+                    </strong></p>
                 </div>
             </div>
 
@@ -196,8 +201,10 @@
                             {% endif %}
                             {{ list.user.get_full_name }}
                             <span class="pull-right">{{ list.created_date }}</span>
-
-                            <p>{{ list.comment }}</p>
+                            <br></br>
+                            <textarea readonly disabled style="border:none;height:200px;width:800px;resize:none;" >
+                                {{ list.comment }}
+                            </textarea>
                         </div>
                     </div>
 
