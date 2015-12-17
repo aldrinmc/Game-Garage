@@ -59,14 +59,14 @@ class User(AbstractBaseUser, PermissionsMixin):
 ###############################################################################
 
 class Platform(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
 
 class Category(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
@@ -82,27 +82,27 @@ def generate_filename(instance, filename):
 
 
 class Game_info(models.Model):
-    title = models.CharField(max_length=30, unique=True)
-    description = models.TextField(max_length=3000)
+    title = models.CharField(max_length=100, unique=True)
+    description = models.TextField(max_length=5000)
     category_id = models.ManyToManyField(Category)
     platform = models.ManyToManyField(Platform, null=True, blank=True)
-    redirectlink = models.CharField(max_length=250, null=True, blank=True)
-    youtubelink = models.CharField(max_length=250, null=True, blank=True)
+    redirectlink = models.CharField(max_length=300, null=True, blank=True)
+    youtubelink = models.CharField(max_length=300, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
 
 class System_requirement(models.Model):
-    processor_min = models.CharField(max_length=50, default="", null=True, blank=True)
-    memory_min = models.CharField(max_length=50, default="", null=True, blank=True)
-    graphics_min = models.CharField(max_length=50, default="", null=True, blank=True)
-    storage_min = models.CharField(max_length=50, default="", null=True, blank=True)
-    processor_rec = models.CharField(max_length=50, default="", null=True, blank=True)
-    memory_rec = models.CharField(max_length=50, default="", null=True, blank=True)
-    graphics_rec = models.CharField(max_length=50, default="", null=True, blank=True)
-    storage_rec = models.CharField(max_length=50, default="", null=True, blank=True)
-    compatible = models.CharField(max_length=200, default="", null=True, blank=True)
+    processor_min = models.CharField(max_length=150, default="", null=True, blank=True)
+    memory_min = models.CharField(max_length=150, default="", null=True, blank=True)
+    graphics_min = models.CharField(max_length=150, default="", null=True, blank=True)
+    storage_min = models.CharField(max_length=150, default="", null=True, blank=True)
+    processor_rec = models.CharField(max_length=150, default="", null=True, blank=True)
+    memory_rec = models.CharField(max_length=150, default="", null=True, blank=True)
+    graphics_rec = models.CharField(max_length=150, default="", null=True, blank=True)
+    storage_rec = models.CharField(max_length=150, default="", null=True, blank=True)
+    compatible = models.CharField(max_length=300, default="", null=True, blank=True)
     gameinfo_id = models.ForeignKey(Game_info, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
@@ -116,7 +116,7 @@ class Image(models.Model):
 
 
 class Feedback(models.Model):
-    comment = models.TextField(max_length=300)
+    comment = models.TextField(max_length=500)
     created_date = models.DateTimeField(default=timezone.now(), blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     rating = models.IntegerField()
@@ -126,7 +126,7 @@ class Feedback(models.Model):
 
 
 class Game_request(models.Model):
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=100)
     created_date = models.DateTimeField(default=timezone.now(), blank=True, null=True)
     published_date = models.DateTimeField(blank=True, null=True)
     user = models.ForeignKey(User, null=True, blank=True)
