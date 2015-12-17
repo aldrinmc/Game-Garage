@@ -8,6 +8,10 @@
     <div class="login-06">
         <div class="sixth-login">
             <form method="POST" class="six" role="form">
+            {% if log_fail == True %}
+                <br>
+                <div class="alert alert-danger"><strong>Wrong Password or email.</strong></div>
+            {% endif %}
                 {% csrf_token %}
                 
                 <div class="light-b">
