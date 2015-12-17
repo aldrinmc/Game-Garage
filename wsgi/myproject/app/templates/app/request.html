@@ -7,11 +7,12 @@
 {% block content %}
     <div class="row">
         <div class="col-md-3"></div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="padding-top: 30px">
+
             {% if req_success == True %}
                 <div class="alert alert-success">You have successfully requested a game</div>
             {% endif %}
-            <h1 style="padding-top: 50px">Request Game</h1>
+            <h1>Request Game</h1>
             <hr>
             <form method="POST" class="post-form">
                 {% csrf_token %}
@@ -19,8 +20,15 @@
                 <br>
                 <button type="submit" class="save btn btn-default">Request</button>
             </form>
+
         </div>
         <div class="col-md-3"></div>
     </div>
+    <br>
+    <br><br><br>
+    <br>
+    <br>
+    <br>
+
 
 {% endblock content %}
