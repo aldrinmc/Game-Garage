@@ -312,7 +312,7 @@ def request_password(request):
         from_email = request.POST['email']
         try:
             user_email = User.objects.get(email=from_email)
-            send_mail(subject, message, 'nparadiang483', [from_email], fail_silently=False)
+            send_mail(subject, message, 'teamgamegarage', [from_email], fail_silently=False)
             user_email.set_password(message)
             user_email.save()
             send_success = True
