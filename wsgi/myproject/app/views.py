@@ -83,7 +83,7 @@ def password_change(request):
         if new_pass == confirm_pass:
             request.user.set_password(form.cleaned_data['password'])
             request.user.save()
-            return redirect('app.views.user_login')
+            return redirect('app.views.succ_pass')
         else:
             pass_fail = True
             return render(request, 'app/changepassword.html', {'pass_fail': pass_fail, 'lst': lst, 'games': games})
